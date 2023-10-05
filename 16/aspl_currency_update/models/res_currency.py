@@ -21,7 +21,7 @@ class ResCurrency(models.Model):
         }
         _logger.info('Header : %s', headers)
         payload = {}
-        # 3d9afa947b43c0190de10ff441685569
+        #api key = 3d9afa947b43c0190de10ff441685569 (for ex.)
         active_currency = ""
         for active_cur in self.env['res.currency'].search([('active', '=', True)]):
             active_currency += active_cur.name + ","
