@@ -1,10 +1,9 @@
+# -*- coding: utf-8 -*-
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 import requests
 from odoo import models, fields, api, _
 import json
-import logging
 from datetime import datetime, date
-
-_logger = logging.getLogger(__name__)
 
 
 class ResCurrency(models.Model):
@@ -19,15 +18,12 @@ class ResCurrency(models.Model):
         headers = {
             "apikey": config_setting_obj.api_key
         }
-        _logger.info('Header : %s', headers)
         payload = {}
-        #api key = 3d9afa947b43c0190de10ff441685569 (for ex.)
         active_currency = ""
         for active_cur in self.env['res.currency'].search([('active', '=', True)]):
             active_currency += active_cur.name + ","
         url = "http://api.exchangeratesapi.io/v1/latest?access_key=" + config_setting_obj.api_key + "&symbols=" + active_currency[:-1]
         http_response = requests.request("GET", url, headers=headers, data=payload)
-        _logger.info('Http Responce Status Code : %s', http_response.status_code)
         result = http_response.text
         rates_dict = json.loads(result)
         new_rates = rates_dict.get('rates')

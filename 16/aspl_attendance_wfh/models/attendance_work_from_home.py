@@ -1,14 +1,9 @@
 # -*- coding: utf-8 -*-
-
-from __future__ import division
-import logging
-import datetime
-from odoo import api, models, _, fields, exceptions, _
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 from datetime import datetime
-from odoo.exceptions import AccessError,UserError, ValidationError
+from odoo import api, models, fields, exceptions, _
+from odoo.exceptions import ValidationError
 from odoo.tools import format_datetime
-
-_logger = logging.getLogger(__name__)
 
 
 class AttendanceWorkFromHome(models.Model):
@@ -77,22 +72,22 @@ class AttendanceWorkFromHome(models.Model):
                     raise exceptions.ValidationError(_('"Check Out" time cannot be earlier than "Check In" time.'))
 
     @api.model
-    def create(self,vals):
-        employee_id = self.env['hr.employee'].search([('id','=',vals['employee_id'])])
+    def create(self, vals):
+        employee_id = self.env['hr.employee'].search([('id', '=', vals['employee_id'])])
         if employee_id:
             if type(vals['start_date']) == str:
                 start_date = datetime.strptime(vals['start_date'], '%Y-%m-%d %H:%M:%S').date()
             else:
                 start_date = vals['start_date']
-            wfhApplication = self.env['application.work.from.home'].search([('employee_id','=',vals['employee_id']),
-                                                                            ('start_date','<=',start_date),
-                                                                            ('end_date','>=',start_date),
-                                                                            ('work_state','=','approved')])
-        
-            if not wfhApplication:
-                raise ValidationError('"Work From Home" can be applied only if it is priorly approved. Please check if your "Work From Home Application" is approved.')
-        return super(AttendanceWorkFromHome, self).create(vals)
+            wfhApplication = self.env['application.work.from.home'].search([('employee_id', '=', vals['employee_id']),
+                                                                            ('start_date', '<=', start_date),
+                                                                            ('end_date', '>=', start_date),
+                                                                            ('work_state', '=', 'approved')])
 
+            if not wfhApplication:
+                raise ValidationError(
+                    '"Work From Home" can be applied only if it is priorly approved. Please check if your "Work From Home Application" is approved.')
+        return super(AttendanceWorkFromHome, self).create(vals)
 
     def submit_work_from_home(self):
         """ submit work from home attendance """
@@ -110,50 +105,58 @@ class AttendanceWorkFromHome(models.Model):
 
             mail_cc_list = []
 
-            attendance_manager_group_users = self.env['res.users'].search([('groups_id','=',self.env.ref('hr_attendance.group_hr_attendance_manager').sudo().id)])
-            hr_employee = self.env['hr.employee'].search([('user_id','in',attendance_manager_group_users.ids),('department_id.name','=','Human Resource'),('user_id.company_ids','in',record.employee_id.company_id.id)])
-            for mail in hr_employee : mail_cc_list.append(mail.work_email)
+            attendance_manager_group_users = self.env['res.users'].search(
+                [('groups_id', '=', self.env.ref('hr_attendance.group_hr_attendance_manager').sudo().id)])
+            hr_employee = self.env['hr.employee'].search(
+                [('user_id', 'in', attendance_manager_group_users.ids), ('department_id.name', '=', 'Human Resource'),
+                 ('user_id.company_ids', 'in', record.employee_id.company_id.id)])
+            for mail in hr_employee: mail_cc_list.append(mail.work_email)
             mail_cc = ','.join(mail_cc_list)
-            
+
             url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
             menuId = self.env.ref('aspl_attendance_wfh.attendance_work_from_home_menu').sudo().id
             actionId = self.env.ref('aspl_attendance_wfh.action_attendance_work_from_home_view').sudo().id
 
-            approvePageURL = url + '/web#id='+ str(self.id)+ '&menu_id='+str(menuId)+'&action='+str(actionId)+'&model=attendance.work.from.home&view_type=form'
+            approvePageURL = url + '/web#id=' + str(self.id) + '&menu_id=' + str(menuId) + '&action=' + str(
+                actionId) + '&model=attendance.work.from.home&view_type=form'
             context = {
-                        'mail_to':self.employee_id.parent_id.work_email,
-                        'mail_cc':mail_cc,
-                        'approvePageURL':approvePageURL,
-                        'total_time':format(self.total_time,".2f") 
-                    }
-            
-            template_id = self.env['mail.template'].sudo().search([('name','=','Work From Home of Employee')])
+                'mail_to': self.employee_id.parent_id.work_email,
+                'mail_cc': mail_cc,
+                'approvePageURL': approvePageURL,
+                'total_time': format(self.total_time, ".2f")
+            }
+
+            template_id = self.env['mail.template'].sudo().search([('name', '=', 'Work From Home of Employee')])
             for tmp_id in template_id:
-                mail_id = tmp_id.with_context(context).send_mail(self.id,force_send = True)
+                mail_id = tmp_id.with_context(context).send_mail(self.id, force_send=True)
 
     def mail_to_employee_approver(self):
         mail_cc_list = []
 
-        attendance_manager_group_users = self.env['res.users'].search([('groups_id','=',self.env.ref('hr_attendance.group_hr_attendance_manager').sudo().id)])
-        hr_employee = self.env['hr.employee'].search([('user_id','in',attendance_manager_group_users.ids),('department_id.name','=','Human Resource'),('user_id.company_ids','in',self.employee_id.company_id.id)])
-        for mail in hr_employee : mail_cc_list.append(mail.work_email)
+        attendance_manager_group_users = self.env['res.users'].search(
+            [('groups_id', '=', self.env.ref('hr_attendance.group_hr_attendance_manager').sudo().id)])
+        hr_employee = self.env['hr.employee'].search(
+            [('user_id', 'in', attendance_manager_group_users.ids), ('department_id.name', '=', 'Human Resource'),
+             ('user_id.company_ids', 'in', self.employee_id.company_id.id)])
+        for mail in hr_employee: mail_cc_list.append(mail.work_email)
         mail_cc = ','.join(mail_cc_list)
-        
+
         url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
         menuId = self.env.ref('aspl_attendance_wfh.attendance_work_from_home_menu').sudo().id
         actionId = self.env.ref('aspl_attendance_wfh.action_attendance_work_from_home_view').sudo().id
 
-        approvePageURL = url + '/web#id='+ str(self.id)+ '&menu_id='+str(menuId)+'&action='+str(actionId)+'&model=attendance.work.from.home&view_type=form'
+        approvePageURL = url + '/web#id=' + str(self.id) + '&menu_id=' + str(menuId) + '&action=' + str(
+            actionId) + '&model=attendance.work.from.home&view_type=form'
         context = {
-                    'mail_to':self.employee_id.work_email,
-                    'mail_cc':mail_cc,
-                    'approvePageURL':approvePageURL,
-                    'total_time':format(self.total_time,".2f")
-                }
-        template_id = self.env['mail.template'].sudo().search([('name','=','Approve/Reject of Work From Home')])
+            'mail_to': self.employee_id.work_email,
+            'mail_cc': mail_cc,
+            'approvePageURL': approvePageURL,
+            'total_time': format(self.total_time, ".2f")
+        }
+        template_id = self.env['mail.template'].sudo().search([('name', '=', 'Approve/Reject of Work From Home')])
         for tmp_id in template_id:
-            mail_id = tmp_id.with_context(context).send_mail(self.id,force_send = True)
-    
+            mail_id = tmp_id.with_context(context).send_mail(self.id, force_send=True)
+
     def approve(self):
         self.write({'work_state': 'approved'})
         for rec in self:
@@ -179,28 +182,29 @@ class AttendanceWorkFromHome(models.Model):
                 })
                 if attendance_id:
                     self.write({'work_state': 'considered',
-                            'record_status': True,
-                            'attendance_id': attendance_id.id})
-                
+                                'record_status': True,
+                                'attendance_id': attendance_id.id})
+
                 rec.mail_to_employee_approver()
         return True
 
     def auto_approve_attnedance_work_from_home_schedular(self):
-        permenent_wfh_employee = self.env['hr.employee'].search([('permanent_work_from_home','=',True)])
+        permenent_wfh_employee = self.env['hr.employee'].search([('permanent_work_from_home', '=', True)])
         if permenent_wfh_employee:
-            permenent_wfh_list =self.env['attendance.work.from.home'].search([('work_state','=','to_submit'),
-                                                                            ('employee_id','in',permenent_wfh_employee.ids),
-                                                                            ('attendance_id','=',False)])
+            permenent_wfh_list = self.env['attendance.work.from.home'].search([('work_state', '=', 'to_submit'),
+                                                                               ('employee_id', 'in',
+                                                                                permenent_wfh_employee.ids),
+                                                                               ('attendance_id', '=', False)])
             for wfh in permenent_wfh_list:
                 last_attendance_before_check_in = self.env['hr.attendance'].search([
                     ('employee_id', '=', wfh.employee_id.id),
                     ('check_in', '<=', wfh.start_date)
                 ], order='check_in desc', limit=1)
 
-                _logger.info("last_attendance_before_check_in == %s",last_attendance_before_check_in)
                 errorMessage = []
                 if last_attendance_before_check_in and last_attendance_before_check_in.check_out and last_attendance_before_check_in.check_out > wfh.start_date:
-                    errorMessage = "Cannot create new attendance record as you were already checked in on " + format_datetime(self.env, wfh.start_date, dt_format=False)
+                    errorMessage = "Cannot create new attendance record as you were already checked in on " + format_datetime(
+                        self.env, wfh.start_date, dt_format=False)
                     wfh.message_post(body=errorMessage)
                     wfh.write({'work_state': 'rejected'})
                 else:
@@ -211,10 +215,9 @@ class AttendanceWorkFromHome(models.Model):
                     })
                     if attendance_id:
                         wfh.write({'work_state': 'considered',
-                                    'record_status': True,
-                                    'attendance_id': attendance_id.id})
+                                   'record_status': True,
+                                   'attendance_id': attendance_id.id})
 
-                _logger.info("errorMessage == %s",errorMessage)
 
     def set_to_default(self):
         self.write({'work_state': 'new'})
@@ -241,5 +244,3 @@ class AttendanceWorkFromHome(models.Model):
         for wfh in self:
             if wfh.work_state == 'to_submit':
                 wfh.approve()
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

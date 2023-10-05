@@ -1,12 +1,11 @@
-from odoo import api, fields, models, _
-import pymssql
-from odoo.exceptions import ValidationError
+# -*- coding: utf-8 -*-
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 import datetime
-from dateutil.relativedelta import relativedelta
+import pymssql
 import pytz
-import logging
-
-_logger = logging.getLogger(__name__)
+from dateutil.relativedelta import relativedelta
+from odoo import fields, models, _
+from odoo.exceptions import ValidationError
 
 
 class AttendanceLog(models.Model):
@@ -33,7 +32,8 @@ class AttendanceLog(models.Model):
                 t1 = f"DeviceLogs_{(datetime.datetime.today() - relativedelta(days=15)).month}_{(datetime.datetime.today() - relativedelta(months=1)).year}"
                 t2 = f"DeviceLogs_{datetime.datetime.today().month}_{datetime.datetime.today().year}"
 
-                sql = "select DeviceLogId,UserId,LogDate,Direction from " + str(t1) + " where cast(LogDate as DATE) >= '" + str(
+                sql = "select DeviceLogId,UserId,LogDate,Direction from " + str(
+                    t1) + " where cast(LogDate as DATE) >= '" + str(
                     start_date) + "' and cast(LogDate as DATE) <= '" + str(
                     end_date) + "' UNION select DeviceLogId,UserId,LogDate,Direction from " + str(
                     t2) + " where cast(LogDate as DATE) >= '" + str(
@@ -72,7 +72,8 @@ class AttendanceLog(models.Model):
                                         'log_date': row[2],
                                         'direction': row[3],
                                     }
-                                    existing_record = self.env['attendance.log'].search([('device_log_id', '=', row[0]), ('log_date', '=', row[2])])
+                                    existing_record = self.env['attendance.log'].search(
+                                        [('device_log_id', '=', row[0]), ('log_date', '=', row[2])])
                                     if not existing_record:
                                         bio_data = self.env['attendance.log'].create(model_data)
 
@@ -80,7 +81,8 @@ class AttendanceLog(models.Model):
                                         user_date = bio_data.log_date.astimezone(user_time).strftime("%H:%M")
 
                                         # make prev_bio_data empty when employee change, or date change
-                                        if prev_bio_data and (prev_bio_data.employee != bio_data.employee or prev_bio_data.log_date.date() != bio_data.log_date.date()):
+                                        if prev_bio_data and (
+                                                prev_bio_data.employee != bio_data.employee or prev_bio_data.log_date.date() != bio_data.log_date.date()):
                                             # set check-out in last attendance if check-out not find.
                                             if prev_bio_data.employee == bio_data.employee and prev_bio_data.log_date.date() != bio_data.log_date.date() and not last_attendance.check_out:
                                                 last_attendance.write({'check_out': last_attendance.check_in,
@@ -88,7 +90,6 @@ class AttendanceLog(models.Model):
                                                                        'has_error': True})
                                             prev_bio_data = False
                                             last_attendance = False
-
 
                                         if bio_data.direction == 'out' and not prev_bio_data:
                                             # check last entry of in direction without check-out then set check-out in last entry for same day and continue
@@ -170,7 +171,8 @@ class AttendanceLog(models.Model):
                                                      'comment': last_attendance.comment + ', ' + user_date + '(O)'})
                                         elif prev_bio_data and prev_bio_data.direction == 'out' and bio_data.direction == 'out':
                                             last_attendance.comment = last_attendance.comment + ', ' + user_date + '(O)'
-                                            last_attendance.write({'has_error': True, 'comment': last_attendance.comment + ', ' + user_date + '(O)'})
+                                            last_attendance.write({'has_error': True,
+                                                                   'comment': last_attendance.comment + ', ' + user_date + '(O)'})
                                         prev_bio_data = bio_data
 
                 conn.close()

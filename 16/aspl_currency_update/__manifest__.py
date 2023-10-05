@@ -1,24 +1,29 @@
+# -*- coding: utf-8 -*-
+###############################################################################
+#
+# Aspire Softserv Pvt. Ltd.
+# Copyright (C) Aspire Softserv Pvt. Ltd.(<https://aspiresoftserv.com>).
+#
+###############################################################################
 {
-    'name': "Currency Rate Update",
-    'summary': "Update exchange rates from Exchangereates(APILayer)",
+    "name": "Currency Rate Update",
+    "category": "Accounting",
+    "summary": "Update exchange rates from Exchangereates(APILayer)",
+    "version": "16.0.0.1.0",
+    "license": "AGPL-3",
     'description': """
+        Update exchange rates from Exchangereates(APILayer).
     """,
-    'author': "Aspire Softserv Private Limited",
-    'website': "https://aspiresoftserv.com",
-    'category': 'Accounting',
-    'version': '0.0.9',
-    'price': 11.99,
-    'currency': 'USD',
-    'depends': ['base', 'account'],
-    'data': [
+    "author": "Aspire Softserv Pvt. Ltd",
+    "website": "https://aspiresoftserv.com",
+    "depends": ['base', 'account'],
+    "data": [
         'data/currency_rates_updation.xml',
         'views/res_config_settings.xml',
         'views/res_currency.xml',
     ],
-    'installable': True,
-    'application': False,
-    'auto_install': False,
-    'license': 'AGPL-3',
+    "application": True,
     "installable": True,
-    "support": "odoo@aspiresoftserv.com",
+    "maintainer": "Aspire Softserv Pvt. Ltd",
+    "support":"odoo@aspiresoftserv.com",
 }

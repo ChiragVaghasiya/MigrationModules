@@ -46,6 +46,5 @@
         <record id="hr_attendance.menu_hr_attendance_settings" model="ir.ui.menu">
             <field name="active" eval="False"/>
         </record>
-
     </data>
 </odoo>

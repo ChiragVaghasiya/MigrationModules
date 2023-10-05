@@ -10,7 +10,6 @@
             <field name="model_id" ref="model_attendance_work_from_home"/>
             <field name="body_html" type="html">
                 <div style="font-family: Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: none; max-width: 600px; font-size: 14px; margin: 0 auto; ;padding: 0px; box-sizing: border-box;border:1px solid #ddd;">
-
                     <table class="body-wrap" style="width: 100%; border-collapse: collapse; border-spacing: 0;">
                         <tbody>
                             <tr>
@@ -40,7 +39,6 @@
                                                                 Check Out :
                                                                 <t t-out="object.end_date"></t>
                                                             </p>
-                                                            <!-- <p style="margin-bottom: 10px; font-weight: normal; font-size: 14px; line-height: 0.5;">From Date :  <t t-out="object.request_date_from"></t></p> -->
                                                             <p style="margin-bottom: 10px; font-weight: normal; font-size: 14px; line-height: 0.5;">
                                                                 Duration : <t t-esc="ctx.get('total_time')"></t> hours
                                                             </p>
@@ -106,7 +104,8 @@
                                                         <td>
                                                             <br/>
                                                             <p style="margin-bottom: 10px; font-weight: normal; font-size: 14px; line-height: 0.5;">
-                                                                Hello, <t t-out="object.employee_id.name"></t>
+                                                                Hello,
+                                                                <t t-out="object.employee_id.name"></t>
                                                             </p>
                                                             <br/>
                                                             <p style="margin-bottom: 10px; font-weight: normal; font-size: 14px; line-height: 0.5;">
@@ -168,7 +167,8 @@
                                                         <td>
                                                             <br/>
                                                             <p style="margin-bottom: 10px; font-weight: normal; font-size: 14px; line-height: 0.5;">
-                                                                <t t-out="object.employee_id.name"></t> has
+                                                                <t t-out="object.employee_id.name"></t>
+                                                                has
                                                                 applied for a Work From Home.
                                                             </p>
                                                             <br/>
@@ -183,7 +183,6 @@
                                                                 End Date :
                                                                 <t t-out="object.end_date"></t>
                                                             </p>
-                                                            <!-- <p style="margin-bottom: 10px; font-weight: normal; font-size: 14px; line-height: 0.5;">From Date :  <t t-out="object.request_date_from"></t></p> -->
                                                             <p style="margin-bottom: 10px; font-weight: normal; font-size: 14px; line-height: 0.5;">
                                                                 Duration : <t t-out="object.total_day"></t> days
                                                             </p>
@@ -203,7 +202,6 @@
                                                                    style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
                                                                     View Detail
                                                                 </a>
-
                                                             </div>
                                                             <br/>
                                                             <p style="margin-bottom: 10px; font-weight: normal; font-size: 14px; line-height: 0.5;">
@@ -225,7 +223,6 @@
                 </div>
             </field>
         </record>
-
 
         <record id="application_work_from_home_mail_approver_template" model="mail.template">
             <field name="name">Approve/Reject of Application Of Work From Home</field>
@@ -253,7 +250,8 @@
                                                         <td>
                                                             <br/>
                                                             <p style="margin-bottom: 10px; font-weight: normal; font-size: 14px; line-height: 0.5;">
-                                                                Hello, <t t-out="object.employee_id.name"></t>
+                                                                Hello,
+                                                                <t t-out="object.employee_id.name"></t>
                                                             </p>
                                                             <br/>
                                                             <p style="margin-bottom: 10px; font-weight: normal; font-size: 14px; line-height: 0.5;">
@@ -262,7 +260,6 @@
                                                                     t-out="object.employee_id.parent_id.name"></t>.
                                                             </p>
                                                             <br/>
-
                                                             <div style="margin: 16px 0px 16px 0px;">
                                                                 <a t-attf-href="{{ ctx.get('approvePageURL') }}"
                                                                    style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
@@ -274,7 +271,6 @@
                                                                 Note : This is an auto-generated mail. Please do not
                                                                 reply
                                                             </p>
-
                                                         </td>
                                                     </tr>
                                                 </tbody>

@@ -90,7 +90,5 @@ companyService.start = function(env, { user, router, cookie }) {
             },
         };
     }
-
-
 return companyService
 
