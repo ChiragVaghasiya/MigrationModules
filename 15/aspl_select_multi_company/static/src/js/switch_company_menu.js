@@ -5,8 +5,6 @@ import { patch } from "@web/core/utils/patch";
 import { browser } from "@web/core/browser/browser";
 import { symmetricalDifference } from "@web/core/utils/arrays";
 
-
-
 patch(SwitchCompanyMenu.prototype, "web.SwitchCompanyMenu",{
 
     toggleCompany(companyId) {
@@ -31,4 +29,3 @@ patch(SwitchCompanyMenu.prototype, "web.SwitchCompanyMenu",{
     }
 
 });
-

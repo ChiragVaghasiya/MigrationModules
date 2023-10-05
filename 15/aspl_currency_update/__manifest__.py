@@ -6,27 +6,23 @@
 #
 ###############################################################################
 {
-    "name": "Aspire Biometric Attendance",
-    "category": "Attendance",
-    "summary": "Attendance Biometric Modules",
+    "name": "Currency Rate Update",
+    "category": "Accounting",
+    "summary": "Update exchange rates from Exchangereates(APILayer)",
     "version": "15.0.0.1.0",
     "license": "AGPL-3",
     'description': """
     """,
     "author": "Aspire Softserv Pvt. Ltd",
     "website": "https://aspiresoftserv.com",
-    "depends": ['base', 'hr', 'hr_attendance'],
+    "depends": ['base', 'account'],
     "data": [
-        'security/user_group.xml',
-        'security/ir.model.access.csv',
-        'data/attendance_log_cron.xml',
-        'views/hr_attendance_views.xml',
-        'views/attendance_log_view.xml',
-        'views/connector_setup.xml',
-        'views/inherit_hr_employee_view.xml',
+        'data/currency_rates_updation.xml',
+        'views/res_config_settings.xml',
+        'views/res_currency.xml',
     ],
     "application": True,
     "installable": True,
     "maintainer": "Aspire Softserv Pvt. Ltd",
-    "support": "odoo@aspiresoftserv.com",
+    "support":"odoo@aspiresoftserv.com",
 }

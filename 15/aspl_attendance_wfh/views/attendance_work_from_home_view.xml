@@ -91,8 +91,6 @@
                                        options='{"no_open": True , "no_quick_create" : True , "no_create_edit": True}'/>
                                 <field name="type_of_wfh"/>
                                 <field name="reason"/>
-                                <!--groups="hr_attendance_aspire.group_manager_user,hr_attendance_aspire.group_admin_user" -->
-
                             </group>
                             <group>
                                 <field name="start_date"
@@ -267,6 +265,5 @@
         <record id="hr_attendance.menu_hr_attendance_settings" model="ir.ui.menu">
             <field name="active" eval="False"/>
         </record>
-
     </data>
 </odoo>

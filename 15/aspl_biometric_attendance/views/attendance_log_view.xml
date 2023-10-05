@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
 <odoo>
-
     <record id="attendance_log_tree" model="ir.ui.view">
         <field name="name">attendance.log.tree</field>
         <field name="model">attendance.log</field>
@@ -39,7 +37,6 @@
     <menuitem id="menu_attendance_log_view_mian"
               name="Attendance Logs"
               parent="aspl_biometric_attendance.menu_parent_attendance"
-              action = "action_attendance_log_detail"
+              action="action_attendance_log_detail"
               sequence="10"/>
-
 </odoo>

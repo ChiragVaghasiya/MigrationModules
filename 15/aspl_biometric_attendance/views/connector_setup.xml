@@ -61,8 +61,6 @@
             <field name="view_id" ref="sqls_connection_tree"/>
         </record>
 
-        <!-- Need to add group in below menu : groups="group_admin_user"-->
-
         <menuitem action="sqls_connection_view"
                   id="menu_sqls_connection_settings"
                   name="SQL Server Connections"
@@ -70,6 +68,5 @@
                   groups="hr_attendance.group_hr_attendance_manager"
                   sequence="100"
         />
-
     </data>
 </odoo>

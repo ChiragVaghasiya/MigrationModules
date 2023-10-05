@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
-
-from odoo import tools, models, fields, api, _
-import logging
-
-_logger = logging.getLogger(__name__)
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
+from odoo import models, fields, api
 
 
 class IrRule(models.Model):
