@@ -12,6 +12,7 @@
     "version": "15.0.0.1.0",
     "license": "AGPL-3",
     'description': """
+        Manage user attandance for Work from Home, User can apply application for work from home, and on approval of WFM generate attendance.
     """,
     "author": "Aspire Softserv Pvt. Ltd",
     "website": "https://aspiresoftserv.com",

@@ -12,6 +12,7 @@
     "version": "15.0.0.1.0",
     "license": "AGPL-3",
     'description': """
+        Update exchange rates from Exchangereates(APILayer).
     """,
     "author": "Aspire Softserv Pvt. Ltd",
     "website": "https://aspiresoftserv.com",

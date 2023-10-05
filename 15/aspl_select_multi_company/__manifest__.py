@@ -12,6 +12,7 @@
     "version": "15.0.0.1.0",
     "license": "AGPL-3",
     'description': """
+        Set All company to enable at login time, and user can select and deselect company later.
     """,
     "author": "Aspire Softserv Pvt. Ltd",
     "website": "https://aspiresoftserv.com",
