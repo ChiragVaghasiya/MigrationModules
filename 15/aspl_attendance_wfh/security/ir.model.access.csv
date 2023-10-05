@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_attendance_work_from_home_ma,attendance.work.from.home.ma,model_attendance_work_from_home,hr_attendance.group_hr_attendance,1,1,1,1
+access_attendance_work_from_home_officer,attendance.work.from.home.officer,model_attendance_work_from_home,hr_attendance.group_hr_attendance_user,1,1,1,1
+access_attendance_work_from_home_manager,attendance.work.from.home.manager,model_attendance_work_from_home,hr_attendance.group_hr_attendance_manager,1,1,1,1
+
+access_application_work_from_home,application.work.from.home,model_application_work_from_home,,1,1,1,1
