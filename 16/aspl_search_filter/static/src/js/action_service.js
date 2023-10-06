@@ -30,26 +30,6 @@ const actionHandlersRegistry = registry.category("action_handlers");
 const actionRegistry = registry.category("actions");
 const viewRegistry = registry.category("views");
 
-/** @typedef {number|false} ActionId */
-/** @typedef {Object} ActionDescription */
-/** @typedef {"current" | "fullscreen" | "new" | "main" | "self" | "inline"} ActionMode */
-/** @typedef {string} ActionTag */
-/** @typedef {string} ActionXMLId */
-/** @typedef {Object} Context */
-/** @typedef {Function} CallableFunction */
-/** @typedef {string} ViewType */
-
-/** @typedef {ActionId|ActionXMLId|ActionTag|ActionDescription} ActionRequest */
-
-/**
- * @typedef {Object} ActionOptions
- * @property {Context} [additionalContext]
- * @property {boolean} [clearBreadcrumbs]
- * @property {CallableFunction} [onClose]
- * @property {Object} [props]
- * @property {ViewType} [viewType]
- */
-
 export async function clearUncommittedChanges(env) {
     const callbacks = [];
     env.bus.trigger("CLEAR-UNCOMMITTED-CHANGES", callbacks);
@@ -237,12 +217,6 @@ function makeActionManager(env) {
         return action;
     }
 
-    /**
-     * @private
-     * @param {string} viewType
-     * @throws {Error} if the current controller is not a view
-     * @returns {View | null}
-     */
     function _getView(viewType) {
         const currentController = controllerStack[controllerStack.length - 1];
         if (currentController.action.type !== "ir.actions.act_window") {
@@ -252,13 +226,6 @@ function makeActionManager(env) {
         return view || null;
     }
 
-    /**
-     * Given a controller stack, returns the list of breadcrumb items.
-     *
-     * @private
-     * @param {ControllerStack} stack
-     * @returns {Breadcrumbs}
-     */
     function _getBreadcrumbs(stack) {
         return stack
             .filter((controller) => controller.action.tag !== "menu")

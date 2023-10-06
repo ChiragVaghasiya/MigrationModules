@@ -2,7 +2,6 @@
 import { FavoriteMenu } from "@web/search/favorite_menu/favorite_menu";
 import { patch } from "@web/core/utils/patch";
 
-
 patch(FavoriteMenu.prototype, 'FavoriteMenu', {
     /**
      * override

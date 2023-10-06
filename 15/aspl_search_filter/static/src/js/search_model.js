@@ -9,6 +9,7 @@ patch(SearchModel.prototype, 'SearchModel', {
     /**
      * override
      */
+    // Include context with a filter when creating a favorite
     async createNewFavorite(params) {
         const { preFavorite, irFilter } = this._getIrFilterDescription(params);
         if (this.env.config && this.env.config.viewType){
