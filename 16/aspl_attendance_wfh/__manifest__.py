@@ -17,6 +17,9 @@
     "author": "Aspire Softserv Pvt. Ltd",
     "website": "https://aspiresoftserv.com",
     "depends": ['base', 'hr', 'hr_attendance'],
+    "external_dependencies": {
+        'python': ['numpy']
+    },
     "data": [
         'security/user_group.xml',
         'security/ir.model.access.csv',
