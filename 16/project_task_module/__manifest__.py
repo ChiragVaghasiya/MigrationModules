@@ -8,11 +8,11 @@
 {
     "name": "Project Task Modules",
     "category": "Project Management",
-    "summary": "Project Task Modules",
+    "summary": "Bifurcate the tasks by modules.",
     "version": "16.0.0.1.0",
     "license": "AGPL-3",
     'description': """
-        This module adds a new field 'Project Module' in Project Tasks. This helps bifurcating tasks by project modules. User can filter/group tasks by module. This makes Kanban view clean and compact.    
+        This module adds a new field 'Project Module' in Project Tasks. This helps bifurcating tasks by project modules. User can filter/group tasks by module. This makes Kanban view clean and compact.
     """,
     "author": "Aspire Softserv Pvt. Ltd",
     "website": "https://aspiresoftserv.com",
@@ -26,5 +26,5 @@
     "installable": True,
     "maintainer": "Aspire Softserv Pvt. Ltd",
     "support":"odoo@aspiresoftserv.com",
-    'images': ['images/smartbutton.png'],
+    "images": ['static/description/banner.gif'],
 }

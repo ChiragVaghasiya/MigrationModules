@@ -8,11 +8,11 @@
 {
     "name": "Currency Rate Update",
     "category": "Accounting",
-    "summary": "Update exchange rates from Exchangereates(APILayer)",
+    "summary": "Update currencies with live rates using ExachangeRatesAPIs.",
     "version": "16.0.0.1.0",
     "license": "AGPL-3",
     'description': """
-        Update exchange rates from Exchangereates(APILayer).
+        This module helps you to keep track of live currency rates using Exchange Rate APIs(put a link to website). Generate an API key from Exchange Rate APIs portal by simply registering to it and configure it in settings. You are all done!!
     """,
     "author": "Aspire Softserv Pvt. Ltd",
     "website": "https://aspiresoftserv.com",
@@ -26,4 +26,5 @@
     "installable": True,
     "maintainer": "Aspire Softserv Pvt. Ltd",
     "support":"odoo@aspiresoftserv.com",
+    "images": ['static/description/banner.gif'],
 }

@@ -8,11 +8,11 @@
 {
     "name": "Aspl Attendance WFH",
     "category": "Attendance",
-    "summary": "Attendance WFH Modules",
+    "summary": "Attendance tracking for work from home employees.",
     "version": "16.0.0.1.0",
     "license": "AGPL-3",
     'description': """
-        Manage user attandance for Work from Home, User can apply application for work from home, and on approval of WFM generate attendance.
+        Attendance tracking of the employees who work from home is a challenge for any company. This module solves the issue for companies which have hybrid model or completely work from home model. Employees can request work from home permission and fill in the logs for the work done.
     """,
     "author": "Aspire Softserv Pvt. Ltd",
     "website": "https://aspiresoftserv.com",
@@ -32,4 +32,5 @@
     "installable": True,
     "maintainer": "Aspire Softserv Pvt. Ltd",
     "support": "odoo@aspiresoftserv.com",
+    "images": ['static/description/banner.gif'],
 }

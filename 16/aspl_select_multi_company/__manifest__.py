@@ -8,11 +8,11 @@
 {
     "name": "Multi Company Selection",
     "category": "Base",
-    "summary": "Multi Company Selection",
+    "summary": "Keep allowed companies selected by defult when user logs in.",
     "version": "16.0.0.1.0",
     "license": "AGPL-3",
     'description': """
-        Set All company to enable at login time, and user can select and deselect company later.
+        In Odoo, user may be granted with access to multiple companies. This module helps you keep all allowed companies enabled when user logs in. However, user can belong to only a single compnay. The module also select the native company upon login.
     """,
     "author": "Aspire Softserv Pvt. Ltd",
     "website": "https://aspiresoftserv.com",
@@ -26,4 +26,5 @@
     "installable": True,
     "maintainer": "Aspire Softserv Pvt. Ltd",
     "support":"odoo@aspiresoftserv.com",
+    "images": ['static/description/banner.gif'],
 }

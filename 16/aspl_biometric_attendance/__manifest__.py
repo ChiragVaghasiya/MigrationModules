@@ -8,11 +8,11 @@
 {
     "name": "Aspire Biometric Attendance",
     "category": "Attendance",
-    "summary": "Attendance Biometric Modules",
+    "summary": "Live attendance updates from ESSL attendance device.",
     "version": "16.0.0.1.0",
     "license": "AGPL-3",
     'description': """
-        Synchronization with ESSL to get employee's every day attendances.
+        ESSL biometric devices are quite popular for attendance management. This modules provides integration between ESSL device and Odoo attendance module. It provides you almost live view of presence.
     """,
     "author": "Aspire Softserv Pvt. Ltd",
     "website": "https://aspiresoftserv.com",
@@ -33,4 +33,5 @@
     "installable": True,
     "maintainer": "Aspire Softserv Pvt. Ltd",
     "support": "odoo@aspiresoftserv.com",
+    "images": ['static/description/banner.gif'],
 }

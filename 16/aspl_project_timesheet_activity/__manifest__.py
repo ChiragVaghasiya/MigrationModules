@@ -8,7 +8,7 @@
 {
     "name": "Project Timesheet Activity",
     "category": "Timesheet",
-    "summary": "Project Timesheet Activity",
+    "summary": "Categorize your work entries by its type.",
     "version": "16.0.0.1.0",
     "license": "AGPL-3",
     'description': """
@@ -26,5 +26,5 @@
     "installable": True,
     "maintainer": "Aspire Softserv Pvt. Ltd",
     "support": "odoo@aspiresoftserv.com",
-    'images': ['images/timesheetontask.png'],
+    "images": ['static/description/banner.gif'],
 }
