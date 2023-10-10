@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <record id="view_hr_employee_form_inherit" model="ir.ui.view">
+            <field name="name">hr.employee.form.inherit</field>
+            <field name="model">hr.employee</field>
+            <field name="priority" eval="16"/>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//page[@name='hr_settings']" position="inside">
+                    <group>
+                        <field name="grey_gratuity"/>
+                        <field name="emp_gratuity"/>
+                    </group>
+                </xpath>
+
+                <xpath expr="//form/sheet/notebook/page[@name='personal_information']" position="before">
+                    <page name="joining" string="Joining">
+                        <group>
+                            <field name="join_date"/>
+                        </group>
+                    </page>
+                    <page name="separation" string="Separation"
+                          groups="hr.group_hr_user">
+                        <group>
+                            <group>
+                                <field name="separation_mode" widget="selection"/>
+                            </group>
+                        </group>
+                        <form>
+                            <sheet>
+                                <group attrs="{'invisible': [('separation_mode', '!=', 'resigned')]}">
+                                    <group string="Resignation Details">
+                                        <field name="resignation_date"
+                                               attrs="{'required': [('separation_mode', '=', 'resigned')]}"/>
+                                        <field name="leaving_rason"
+                                               attrs="{'required': [('separation_mode', '=', 'resigned')]}"/>
+                                        <label for="resigned_notice_period" string="Notice Period"/>
+                                        <div>
+                                            <field name="resigned_notice_period" placeholder="Enter months"
+                                                   class="oe_inline"/>
+                                            Months
+                                        </div>
+                                        <field name="tentative_leaving_date" readonly="1" force_save="1"/>
+                                    </group>
+                                </group>
+                            </sheet>
+                        </form>
+                    </page>
+                </xpath>
+
+            </field>
+        </record>
+    </data>
+</odoo>
