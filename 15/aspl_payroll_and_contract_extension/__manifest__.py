@@ -21,6 +21,7 @@
                 'hr_contract',
                 'hr_holidays',
                 'hr_payroll_community',
+                'hr_attendance',
                 'mail',
                 ],
     "external_dependencies": {
@@ -41,7 +42,6 @@
         'views/hr_payslip_batch_view.xml',
         'views/employee_full_final_view.xml',
         'wizards/payslip_wizard_view.xml',
-        'wizards/generate_payslip_wizard_view.xml',
         'wizards/attendance_shortfall_wizard_view.xml',
         'views/payslip_modification.xml',
         'views/res_company_payroll_configuration.xml',

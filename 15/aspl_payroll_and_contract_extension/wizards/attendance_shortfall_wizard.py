@@ -20,6 +20,9 @@ class PayslipWizards(models.TransientModel):
     is_hold_salary = fields.Boolean(string='Is Hold Salary')
     payslip_run_id = fields.Many2one('hr.payslip.run')
 
+    approve_all_leave = fields.Boolean(string='All Leave Approve?')
+    remove_all_salary_hold_emp = fields.Boolean(string='All remove Salary Hold Employee?')
+
     field1 = fields.Char("Field1")
     state = fields.Selection([('1', 'Leave Approval'), ('2', 'Attendance Shortfall'), ('3', 'Contact Renewal'), ('4', 'Salary Hold'), ('5', 'Full & Final')], default=False)
 
@@ -42,6 +45,11 @@ class PayslipWizards(models.TransientModel):
     reimbursement_claims = fields.Boolean("Reimbursement Claims")
     lock_it_declaration = fields.Boolean("Lock IT Declaration")
     download_it_declaration = fields.Boolean("Download IT Declaration")
+
+    @api.onchange('remove_all_salary_hold_emp')
+    def remove_all_salary_hold_emp_checkbox(self):
+        if self.remove_all_salary_hold_emp == True:
+            self.employee_ids = False
 
     @api.onchange('select_all')
     def select_all_checkbox(self):
@@ -107,7 +115,6 @@ class PayslipWizards(models.TransientModel):
             raise ValidationError("Please Tick Check Box")
         else:
             self.state = '1'
-            self.approve_all_leaves()
             
     def check_attendance(self):
         employee_ids = self.env['hr.employee'].search([('company_id', '=', self.payslip_run_id.company_id.id)])
@@ -117,23 +124,15 @@ class PayslipWizards(models.TransientModel):
         shortfall_ids_list = []
         for contract_id in contract_ids:
             work_data = contract_id.employee_id.get_work_days_data(day_from, day_to, compute_leaves=True)
-            attend_report_ids = self.env['attendance.report.daywise'].search([('employee', '=', contract_id.employee_id.name),('check_in', '>=', day_from),('check_out', '<=', day_to)])
-            # attend_work_ids = self.env['attendance.work.from.home'].search([('work_state', 'in', ['approved','considered']), ('employee_id', '=', contract_id.employee_id.id),('start_date', '>=', day_from),('end_date', '<=', day_to)])
-            working_hours = 0
-            for attend_report_id in attend_report_ids:
-                difference = round(((attend_report_id.check_out - attend_report_id.check_in).total_seconds()) / 3600.0, 2)
-                working_hours = round(working_hours, 2) + difference
-            # for attend_work_id in attend_work_ids:
-            #     difference = round(((attend_work_id.end_date - attend_work_id.start_date).total_seconds()) / 3600.0, 2)
-            #     working_hours = round(working_hours, 2) + difference
-            if working_hours != 0:
-                working_hours = working_hours - work_data['days']
+            attend_report_ids = self.env['hr.attendance'].search([('employee_id', '=', contract_id.employee_id.id),('check_in', '>=', day_from),('check_out', '<=', day_to)])
+
+            working_hours = round(sum(attend_report_ids.mapped('worked_hours')))
 
             if work_data['hours'] < working_hours:
                 continue
             else:
                 temp_shortfall = work_data['hours'] - working_hours
-                temp_shortfall_days = temp_shortfall/8.5
+                temp_shortfall_days = temp_shortfall/contract_ids.resource_calendar_id.hours_per_day
                 temp_shortfall_duration = temp_shortfall_days - int(temp_shortfall_days)
                 if temp_shortfall_duration < 0.5 and temp_shortfall_duration > 0.0:
                     temp_shortfall_days = int(temp_shortfall_days) + 0.5
@@ -151,7 +150,6 @@ class PayslipWizards(models.TransientModel):
                     'date_start': day_from,
                     'date_end': day_to
                 }
-                # shortfall_id = self.env['hr.attendance.shortfall'].create(data)
                 shortfall_ids_list.append((0, 0, data))
         self.attendance_shortfall_ids = shortfall_ids_list
 
@@ -164,6 +162,8 @@ class PayslipWizards(models.TransientModel):
         if self.state == False:
             self.check_condition_step()
         elif self.state == '1':
+            if self.approve_all_leave:
+                self.approve_all_leaves()
             self.check_attendance()
             self.write({'state': '2'})
         elif self.state == '2':
@@ -202,75 +202,7 @@ class PayslipWizards(models.TransientModel):
             'target': 'new',
         }
 
-    def shortfall_attendance_create(self):
-        leave_type_obj = self.env['hr.leave.type'].search(
-            [('name', 'in', ('Planned leave', 'Unplanned Leaves'))]
-        )
-        leave_dict = leave_type_obj.get_employees_days(self.attendance_shortfall_ids.employee_id.ids)
-        planned_leave_id = self.env['hr.leave.type'].search([
-            ('name', '=', 'Planned leave')]).id
-        unplanned_leave_id = self.env['hr.leave.type'].search([
-            ('name', '=', 'Unplanned Leaves')]).id
-        shortfall_days_list = {}
-        for emp_id in self.attendance_shortfall_ids:
-            if emp_id.checkbox:
-                planned_leaves = leave_dict.get(emp_id.employee_id.id).get(planned_leave_id).get('remaining_leaves')
-                unplanned_leaves = leave_dict.get(emp_id.employee_id.id).get(unplanned_leave_id).get('remaining_leaves')
-                shortfall_days = emp_id.shortfall_days
-
-                if planned_leaves != 0:
-                    if planned_leaves >= shortfall_days:
-                        data = {
-                            'name': 'Leave deducted due to short fall of attendance',
-                            'employee_id': emp_id.employee_id.id,
-                            'holiday_status_id': planned_leave_id,
-                            'number_of_days': -(shortfall_days),
-                        }
-                        allocation_id = self.env['hr.leave.allocation'].create(data)
-                        allocation_id.action_confirm()
-                        allocation_id.action_validate()
-                        shortfall_days = 0
-
-                    else:
-                        data = {
-                            'name': 'Leave deducted due to short fall of attendance',
-                            'employee_id': emp_id.employee_id.id,
-                            'holiday_status_id': planned_leave_id,
-                            'number_of_days': -(planned_leaves),
-                        }
-                        allocation_id = self.env['hr.leave.allocation'].create(data)
-                        allocation_id.action_confirm()
-                        allocation_id.action_validate()
-                        shortfall_days -= planned_leaves
-
-                if unplanned_leaves != 0 and shortfall_days > 0:
-                    if unplanned_leaves >= shortfall_days:
-                        data1 = {
-                            'name': 'Leave deducted due to short fall of attendance',
-                            'employee_id': emp_id.employee_id.id,
-                            'holiday_status_id': unplanned_leave_id,
-                            'number_of_days': -(shortfall_days),
-                        }
-                        allocation_id = self.env['hr.leave.allocation'].create(data1)
-                        allocation_id.action_confirm()
-                        allocation_id.action_validate()
-                        shortfall_days = 0
-                    else:
-                        data1 = {
-                            'name': 'Leave deducted due to short fall of attendance',
-                            'employee_id': emp_id.employee_id.id,
-                            'holiday_status_id': unplanned_leave_id,
-                            'number_of_days': -(unplanned_leaves),
-                        }
-                        allocation_id = self.env['hr.leave.allocation'].create(data1)
-                        allocation_id.action_confirm()
-                        allocation_id.action_validate()
-                        shortfall_days -= unplanned_leaves
-                shortfall_days_list[emp_id.employee_id] = shortfall_days
-        return shortfall_days_list
-
     def auto_genarate_payslip(self):
-        shortfall_days_list = self.shortfall_attendance_create()
         employee = self.env['hr.contract'].search(
             [('date_end', '>=', self.payslip_run_id.date_end),
              ('date_start', '<=', self.payslip_run_id.date_start), ('state', '=', 'open')]).employee_id
@@ -335,14 +267,14 @@ class PayslipWizards(models.TransientModel):
 
                 for checkbox in self.attendance_shortfall_ids:
                     if employee == checkbox.employee_id and checkbox.checkbox == True:
-                        shortfall_days = shortfall_days_list[employee]
+                        shortfall_days = checkbox.shortfall_days
                         if shortfall_days > 0:
                             work_dict = {
                                 'name': 'Attendance Shortfall',
                                 'sequence': 6,
                                 'code': 'SHORTFALL',
                                 'number_of_days': shortfall_days,
-                                'number_of_hours': shortfall_days * 8.5,
+                                'number_of_hours': shortfall_days * self.env['hr.contract'].browse(slip_data['value'].get('contract_id')).resource_calendar_id.hours_per_day,
                                 'contract_id': slip_data['value'].get('contract_id')
                             }
                             work_days.append((0, 0, work_dict))
@@ -364,7 +296,6 @@ class PayslipWizards(models.TransientModel):
 
                 # make full&final employee left
                 if ff_employee:
-                    ff_employee.on_left_org()
                     running_contract = self.env['hr.contract'].search([('employee_id', '=', ff_employee.id), ('state', '=', 'open')])
                     if running_contract:
                         running_contract.state = 'close'

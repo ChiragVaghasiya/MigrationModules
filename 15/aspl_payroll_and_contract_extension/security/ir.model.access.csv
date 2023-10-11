@@ -10,7 +10,6 @@ access_financial_year,access_financial.year,model_financial_year,,1,1,1,1
 access_it_declaration_payslip,access_it.declaration.payslip,model_it_declaration_payslip,,1,1,1,1
 access_payslip_file_wizard,access_payslip.file.wizard,model_payslip_file_wizard,,1,1,1,1
 
-access_payslip_generate_wizard,access.payslip.generate.wizard,model_payslip_generate_wizard,,1,1,1,1
 access_employee_full_final,access.employee.full.final,model_employee_full_final,,1,1,1,1
 access_check_attendance_shortfall,access.check.attendance.shortfall,model_check_attendance_shortfall,,1,1,1,1
 access_hr_attendance_shortfall,access.hr.attendance.shortfall,model_hr_attendance_shortfall,,1,1,1,1
