@@ -33,6 +33,7 @@
         'security/custom_payslip_security.xml',
         'data/payslip_mail_data.xml',
         'data/salary_rule_data.xml',
+        'data/salary_structure.xml',
         'views/hr_employee_view.xml',
         'views/contract_config_view.xml',
         'views/payroll_config_view.xml',
@@ -59,6 +60,7 @@
     },
     "application": True,
     "installable": True,
+    'pre_init_hook': '_pre_init_update_rule',
     "maintainer": "Aspire Softserv Pvt. Ltd",
     "support": "odoo@aspiresoftserv.com",
 }

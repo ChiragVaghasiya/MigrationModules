@@ -61,8 +61,6 @@ class cummulative_details_employee(models.Model):
                 record.tentative_leaving_date = datetime.strptime(dt, "%Y:%m:%d") + relativedelta(
                     months=record.resigned_notice_period)
 
-
-
     def write(self, vals):
         res = super(cummulative_details_employee, self).write(vals)
         group_obj = self.env.ref('aspl_payroll_and_contract_extension.group_employee_category')
