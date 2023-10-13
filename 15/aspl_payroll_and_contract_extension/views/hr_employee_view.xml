@@ -15,10 +15,27 @@
                     </group>
                 </xpath>
 
+                <xpath expr="//form/sheet/notebook/page[@name='personal_information']/group" position="replace"/>
+                <xpath expr="//form/sheet/notebook/page[@name='personal_information']" position="inside">
+                    <notebook>
+                        <page name="personal_detail" string="General">
+                            <div style="position:relative;">
+                                <group col="2">
+                                    <group>
+                                        <field name="physically_challenged"/>
+                                    </group>
+                                </group>
+                            </div>
+                        </page>
+                    </notebook>
+                </xpath>
+
                 <xpath expr="//form/sheet/notebook/page[@name='personal_information']" position="before">
                     <page name="joining" string="Joining">
                         <group>
-                            <field name="join_date"/>
+                            <group>
+                                <field name="join_date"/>
+                            </group>
                         </group>
                     </page>
                     <page name="separation" string="Separation"
@@ -50,17 +67,29 @@
                     </page>
                 </xpath>
 
-                <xpath expr="//form/sheet/notebook/page[@name='personal_information']/group" position="replace"/>
-                <xpath expr="//form/sheet/notebook/page[@name='personal_information']" position="inside">
-                    <notebook>
-                        <page name="personal_detail" string="General">
-                            <div style="position:relative;">
-                                <group col="2">
-                                    <group>
-                                        <field name="physically_challenged"/>
-                                    </group>
+                <xpath expr="//page[@name='hr_settings']" position="before">
+                    <notebook name="bank_detail" string="Bank Details">
+                        <page name="bank_detail1" string="BANK/PF/ESI">
+                            <group>
+                                <group string="Bank Information">
+                                    <field name="bank_id"
+                                           options="{'no_create': True, 'no_create_edit':True, 'no_open':True}"/>
+                                    <field name="account_type_id"/>
+                                    <field name="bank_record_name"/>
+                                    <field name="bank_account_no"/>
                                 </group>
-                            </div>
+                                <group string="PF Account">
+                                    <field name="pf_employee"/>
+                                    <field name="uan" attrs="{'invisible': [('pf_employee','!=',True)]}"/>
+                                    <field name="pf_number" attrs="{'invisible': [('pf_employee','!=',True)]}"/>
+                                    <field name="pf_date" attrs="{'invisible': [('pf_employee','!=',True)]}"/>
+                                    <field name="family_pf_no" attrs="{'invisible': [('pf_employee','!=',True)]}"/>
+                                </group>
+                                <group string="ESI Account">
+                                    <field name="esi_employee"/>
+                                    <field name="esi_no" attrs="{'invisible': [('esi_employee','!=',True)]}"/>
+                                </group>
+                            </group>
                         </page>
                     </notebook>
                 </xpath>

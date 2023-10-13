@@ -15,7 +15,7 @@ class PayslipWizards(models.TransientModel):
 
 
     def _get_template(self):
-        self.banksheet_template = base64.b64encode(open("/opt/odoo/.local/bank_sheet.xlsx", "rb").read())
+        self.banksheet_template = base64.b64encode(open("/tmp/bank_sheet.xlsx", "rb").read())
 
     banksheet_template = fields.Binary('Template', compute="_get_template",default = date.today())
 
@@ -35,7 +35,7 @@ class PayslipWizards(models.TransientModel):
         wb = Workbook()
         ws = wb.active
         ws.append(["PYMT_PROD_TYPE_CODE","PYMT_MODE","DEBIT_ACC_NO","BNF_NAME","BENE_ACC_NO","BENE_IFSC","AMOUNT","DEBIT_NARR","CREDIT_NARR","MOBILE_NUM","EMAIL_ID","REMARK","PYMT_DATE","REF_NO","ADDL_INFO1","ADDL_INFO2","ADDL_INFO3","ADDL_INFO4","ADDL_INFO5","LEI_NUMBER"])
-        name = "/opt/odoo/.local/bank_sheet.xlsx"
+        name = "/tmp/bank_sheet.xlsx"
         wb.save(name)
         batch_id = self.env.context['batch_id']
         payslip_batch_details = self.env['hr.payslip.run'].search([('id', '=', batch_id)])

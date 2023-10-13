@@ -36,6 +36,24 @@ class cummulative_details_employee(models.Model):
     tentative_leaving_date = fields.Date('Tentative Leaving Date', tracking=True)
     physically_challenged = fields.Boolean('Physically Challenged', tracking=True)
 
+    # Employee other_info
+    # bank_account_id inherited from hr.employee
+    bank_id = fields.Many2one('res.bank')
+    account_type_id = fields.Selection([
+        ('salary', 'Salary'),
+        ('saving', 'Saving'),
+        ('current', 'Current')
+    ], 'Account type', help='Add employee bank account type')
+    bank_record_name = fields.Char('Name as per bank record', tracking=True)
+    bank_account_no = fields.Char('Account Number', size=20, help="Max size 20", tracking=True)
+    pf_employee = fields.Boolean('Employee covered under of PF', tracking=True)
+    uan = fields.Char('UAN', size=12, tracking=True)
+    pf_number = fields.Char('PF Number', help="Ex.: AA/AAA/1234567/123/1234567", tracking=True)
+    pf_date = fields.Date('PF Join Date', tracking=True)
+    family_pf_no = fields.Char('Family PF No', size=50, tracking=True)
+    esi_employee = fields.Boolean('Include ESI', tracking=True)
+    esi_no = fields.Char('ESI Number', size=50, tracking=True)
+
     @api.depends('slip_ids', 'payslip_count')
     def _compute_emp_gratuity(self):
         for rec in self:

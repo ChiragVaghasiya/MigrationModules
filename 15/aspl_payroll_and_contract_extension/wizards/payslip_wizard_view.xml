@@ -25,7 +25,6 @@
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">payslip.file.wizard</field>
         <field name="view_mode">form</field>
-<!--        <field name="view_id" ref="payslip_wizard"/>-->
         <field name="target">new</field>
     </record>
     

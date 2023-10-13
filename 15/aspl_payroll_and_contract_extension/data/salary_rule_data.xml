@@ -3,76 +3,72 @@
     <data noupdate="0">
 
         <!--        *** Salary Rules Category ***-->
+
+        <record id="categ_er_ded" model="hr.salary.rule.category">
+            <field name="name">ER Deduction</field>
+            <field name="code">ER_DED</field>
+            <field name="parent_id"></field>
+        </record>
+
         <record id="categ_gratutity" model="hr.salary.rule.category">
             <field name="name">Gratuity</field>
             <field name="code">GRATUITY</field>
+            <field name="parent_id" ref="aspl_payroll_and_contract_extension.categ_er_ded"/>
         </record>
 
-        <record id="categ_esic_er" model="hr.salary.rule.category">
-            <field name="name">ER Deduction</field>
-            <field name="code">ESIC_ER</field>
+        <record id="categ_esic" model="hr.salary.rule.category">
+            <field name="name">ESIC</field>
+            <field name="code">ESIC</field>
+            <field name="parent_id" ref="aspl_payroll_and_contract_extension.categ_er_ded"/>
         </record>
 
-        <record id="categ_esic_ee" model="hr.salary.rule.category">
+        <record id="categ_ee_ded" model="hr.salary.rule.category">
             <field name="name">EE_Deduction</field>
-            <field name="code">ESIC_EE</field>
-        </record>
-
-        <record id="categ_pf_er" model="hr.salary.rule.category">
-            <field name="name">ER Deduction</field>
-            <field name="code">PF_ER</field>
-        </record>
-
-        <record id="categ_pf_ee" model="hr.salary.rule.category">
-            <field name="name">EE_Deduction</field>
-            <field name="code">PF_EE</field>
-        </record>
-
-        <record id="categ_bonus" model="hr.salary.rule.category">
-            <field name="name">Bonus</field>
-            <field name="code">BONUS</field>
-        </record>
-
-        <record id="categ_pt" model="hr.salary.rule.category">
-            <field name="name">EE_Deduction</field>
-            <field name="code">PT</field>
-        </record>
-
-        <record id="categ_it" model="hr.salary.rule.category">
-            <field name="name">IT_Deduction</field>
-            <field name="code">IT</field>
-        </record>
-
-        <record id="categ_total_gratutity" model="hr.salary.rule.category">
-            <field name="name">Total Gratuity</field>
-            <field name="code">TOTALGRATUITY</field>
-        </record>
-
-        <record id="categ_fee" model="hr.salary.rule.category">
-            <field name="name">Fee</field>
-            <field name="code">FEE</field>
-        </record>
-
-        <record id="categ_tds" model="hr.salary.rule.category">
-            <field name="name">TDS</field>
-            <field name="code">TDS</field>
-        </record>
-
-        <record id="categ_ncc" model="hr.salary.rule.category">
-            <field name="name">Net</field>
-            <field name="code">NCC</field>
+            <field name="code">EE_DED</field>
+            <field name="parent_id"></field>
         </record>
 
         <record id="categ_ctc" model="hr.salary.rule.category">
             <field name="name">Monthly CTC</field>
             <field name="code">CTC</field>
+            <field name="parent_id"></field>
         </record>
 
-        <record id="categ_total_ded" model="hr.salary.rule.category">
-            <field name="name">ER Deduction</field>
-            <field name="code">TOTAL_DED</field>
+        <record id="categ_it" model="hr.salary.rule.category">
+            <field name="name">IT_Deduction</field>
+            <field name="code">IT_DED</field>
+            <field name="parent_id"></field>
         </record>
 
+        <record id="categ_bonus" model="hr.salary.rule.category">
+            <field name="name">Bonus</field>
+            <field name="code">BONUS</field>
+            <field name="parent_id"></field>
+        </record>
+
+        <record id="categ_fee" model="hr.salary.rule.category">
+            <field name="name">Fee</field>
+            <field name="code">FEE</field>
+            <field name="parent_id"></field>
+        </record>
+
+        <record id="categ_tds" model="hr.salary.rule.category">
+            <field name="name">TDS</field>
+            <field name="code">TDS</field>
+            <field name="parent_id"></field>
+        </record>
+
+        <record id="categ_total_gratutity" model="hr.salary.rule.category">
+            <field name="name">Total Gratuity</field>
+            <field name="code">TOTALGRATUITY</field>
+            <field name="parent_id"></field>
+        </record>
+
+        <record id="categ_compensation" model="hr.salary.rule.category">
+            <field name="name">Compensation</field>
+            <field name="code">COMP</field>
+            <field name="parent_id"></field>
+        </record>
 
 
         <!--        *** Salary Rules ***-->
@@ -106,7 +102,7 @@
 
         <record id="hr_rule_esic_er" model="hr.salary.rule">
             <field name="name">ESIC (Employer Contribution)</field>
-            <field name="category_id" ref="aspl_payroll_and_contract_extension.categ_esic_er"/>
+            <field name="category_id" ref="aspl_payroll_and_contract_extension.categ_er_ded"/>
             <field name="code">ESIC_ER</field>
             <field name="sequence" eval="3"/>
             <field name="appear_on_contract">true</field>
@@ -121,7 +117,7 @@
 
         <record id="hr_rule_esic_ee" model="hr.salary.rule">
             <field name="name">ESIC</field>
-            <field name="category_id" ref="aspl_payroll_and_contract_extension.categ_esic_ee"/>
+            <field name="category_id" ref="aspl_payroll_and_contract_extension.categ_ee_ded"/>
             <field name="code">ESIC_EE</field>
             <field name="sequence" eval="4"/>
             <field name="appear_on_contract">true</field>
@@ -135,7 +131,7 @@
 
         <record id="hr_rule_pf_er" model="hr.salary.rule">
             <field name="name">Provident Fund (Employer Contribution)</field>
-            <field name="category_id" ref="aspl_payroll_and_contract_extension.categ_pf_er"/>
+            <field name="category_id" ref="aspl_payroll_and_contract_extension.categ_er_ded"/>
             <field name="code">PF_ER</field>
             <field name="sequence" eval="5"/>
             <field name="appear_on_contract">true</field>
@@ -150,7 +146,7 @@
 
         <record id="hr_rule_pf_ee" model="hr.salary.rule">
             <field name="name">Provident Fund</field>
-            <field name="category_id" ref="aspl_payroll_and_contract_extension.categ_pf_er"/>
+            <field name="category_id" ref="aspl_payroll_and_contract_extension.categ_ee_ded"/>
             <field name="code">PF_EE</field>
             <field name="sequence" eval="7"/>
             <field name="appear_on_contract">true</field>
@@ -189,8 +185,7 @@
             <field name="is_tax">false</field>
             <field name="taxable">true</field>
             <field name="amount_select">code</field>
-            <field name="amount_python_compute">result = employee.other_allowance_calculation(contract,worked_days,categories)
-            </field>
+            <field name="amount_python_compute">result = employee.other_allowance_calculation(contract,worked_days,categories)</field>
         </record>
 
         <record id="hr_rule_bonus" model="hr.salary.rule">
@@ -209,7 +204,7 @@
 
         <record id="hr_payroll_community.hr_salary_rule_professionaltax1" model="hr.salary.rule">
             <field name="name">Professional Tax</field>
-            <field name="category_id" ref="aspl_payroll_and_contract_extension.categ_pt"/>
+            <field name="category_id" ref="aspl_payroll_and_contract_extension.categ_ee_ded"/>
             <field name="code">PT</field>
             <field name="sequence" eval="11"/>
             <field name="appear_on_contract">true</field>
@@ -224,7 +219,7 @@
 
         <record id="hr_rule_comp" model="hr.salary.rule">
             <field name="name">Compensation</field>
-            <field name="category_id" ref="hr_payroll_community.COMP"/>
+            <field name="category_id" ref="aspl_payroll_and_contract_extension.categ_compensation"/>
             <field name="code">COMP</field>
             <field name="sequence" eval="12"/>
             <field name="appear_on_contract">true</field>
@@ -296,7 +291,7 @@
 
         <record id="hr_rule_ncc" model="hr.salary.rule">
             <field name="name">Net Consultancy Charges</field>
-            <field name="category_id" ref="aspl_payroll_and_contract_extension.categ_ncc"/>
+            <field name="category_id" ref="hr_payroll_community.NET"/>
             <field name="code">NCC</field>
             <field name="sequence" eval="23"/>
             <field name="appear_on_contract">true</field>
@@ -338,7 +333,7 @@
 
         <record id="hr_rule_total_ded" model="hr.salary.rule">
             <field name="name">Total Deduction</field>
-            <field name="category_id" ref="aspl_payroll_and_contract_extension.categ_total_ded"/>
+            <field name="category_id" ref="aspl_payroll_and_contract_extension.categ_er_ded"/>
             <field name="code">TOTAL_DED</field>
             <field name="sequence" eval="200"/>
             <field name="appear_on_contract">true</field>
@@ -448,6 +443,16 @@
 
         <record id="hr_payroll_community.hr_salary_rule_providentfund1" model="hr.salary.rule">
             <field name="sequence" eval="509"/>
+            <field name="appear_on_contract">false</field>
+            <field name="appears_on_payslip">false</field>
+            <field name="active">false</field>
+            <field name="is_deduction">false</field>
+            <field name="is_tax">false</field>
+            <field name="taxable">false</field>
+        </record>
+
+        <record id="hr_payroll_community.hr_rule_hra" model="hr.salary.rule">
+            <field name="sequence" eval="510"/>
             <field name="appear_on_contract">false</field>
             <field name="appears_on_payslip">false</field>
             <field name="active">false</field>

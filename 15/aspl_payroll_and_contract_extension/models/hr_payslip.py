@@ -170,48 +170,6 @@ class HrPayslipRun(models.Model):
     def compute_all(self):
         for slip in self.slip_ids:
             slip.compute_sheet()
-
-    def auto_genarate_payslip(self):
-        employee = self.env['hr.contract'].search([('date_end','>=',self.date_start),('date_start','<=',self.date_start)]).employee_id
-        current_company_employee = employee.filtered(lambda emp: emp.company_id.id == self.company_id.id)
-
-        if current_company_employee:
-            current_date = date.today()
-            employee_list = []
-            it_declaration_year = str(current_date.strftime('%Y')) + '-' + str((current_date + relativedelta(years =1)).strftime('%y'))  if current_date > date(current_date.year, 3,31) else str((current_date - relativedelta(years =1)).strftime('%Y')) + '-' + str(current_date.strftime('%y'))
-            financial_year = self.env['financial.year'].search([('name','=',it_declaration_year)])
-            if financial_year:
-                for employee_id in current_company_employee:
-                    it_declaration_year_record = self.env['it.declaration.payslip'].search([('employee_id','=',employee_id.id),('financial_year','=',financial_year.id)],limit=1, order='create_date desc')
-                    if it_declaration_year_record and it_declaration_year_record.status == 'unlocked':
-                        employee_list.append(employee_id.name)
-            else:
-                raise ValidationError("It declaration are not created for current Year. Please create for all employee.")
-           
-            if len(employee_list) > 1:
-                raise ValidationError("IT Declaration for following employees are not locked. Please lock before you generate payslips.\n"+"\n".join("- " + employee for employee in employee_list))
-            elif len(employee_list) == 1:
-                raise ValidationError("IT Declaration for following employee is not locked. Please lock before you generate payslip.\n- " + str(employee_list[0]))
-         
-            payslips = self.env['hr.payslip']
-
-            for employee in current_company_employee:
-                slip_data = self.env['hr.payslip'].onchange_employee_id(self.date_start, self.date_end, employee.id, contract_id=False)
-                res = {
-                    'employee_id': employee.id,
-                    'name': slip_data['value'].get('name'),
-                    'struct_id': slip_data['value'].get('struct_id'),
-                    'contract_id': slip_data['value'].get('contract_id'),
-                    'payslip_run_id': self.id,
-                    'input_line_ids': [(0, 0, x) for x in slip_data['value'].get('input_line_ids')],
-                    'worked_days_line_ids': [(0, 0, x) for x in slip_data['value'].get('worked_days_line_ids')],
-                    'date_from': self.date_start,
-                    'date_to': self.date_end,
-                    'credit_note':self.credit_note,
-                    'company_id': employee.company_id.id,
-                }
-                payslips += self.env['hr.payslip'].create(res)
-            payslips.compute_sheet()
             
     def auto_genarate_payslip1(self):
         resign_id = self.env['employee.full.final'].search([('resign_date', '>=', self.date_start), ('resign_date', '<=', self.date_end), ('company_id', '=', self.company_id.id), ('state', '=', 'draft')])
@@ -268,8 +226,6 @@ class HrPayslipRun(models.Model):
         wb = Workbook()
         ws = wb.active
 
-        ws.cell(row=1, column=1).value = "Employee No"
-        ws.cell(row=1, column=1).fill = PatternFill(start_color="999999", fill_type="solid")
         ws.cell(row=1, column=2).value = "Name"
         ws.cell(row=1, column=2).fill = PatternFill(start_color="999999", fill_type="solid")
         ws.cell(row=1, column=3).value = "Total Working Days"
@@ -325,7 +281,6 @@ class HrPayslipRun(models.Model):
                     elif leave_sf_hrs > 3 and leave_sf_hrs < 9:
                         leave_sf_2 = 1
                 not_worked = leave_lop + leave_sf + leaves + leave_sf_2
-            ws.cell(row=rowcounter, column=1).value = data.employee_id.employee_no
             ws.cell(row=rowcounter, column=2).value = data.employee_id.name
             ws.cell(row=rowcounter, column=3).value = total_days['days'] - leaves
             ws.cell(row=rowcounter, column=5).value = total_days['days'] - not_worked
