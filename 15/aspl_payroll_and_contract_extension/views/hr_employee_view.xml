@@ -50,6 +50,21 @@
                     </page>
                 </xpath>
 
+                <xpath expr="//form/sheet/notebook/page[@name='personal_information']/group" position="replace"/>
+                <xpath expr="//form/sheet/notebook/page[@name='personal_information']" position="inside">
+                    <notebook>
+                        <page name="personal_detail" string="General">
+                            <div style="position:relative;">
+                                <group col="2">
+                                    <group>
+                                        <field name="physically_challenged"/>
+                                    </group>
+                                </group>
+                            </div>
+                        </page>
+                    </notebook>
+                </xpath>
+
             </field>
         </record>
     </data>

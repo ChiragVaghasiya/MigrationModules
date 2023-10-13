@@ -34,6 +34,7 @@ class cummulative_details_employee(models.Model):
          ('termination', 'TERMINATION ON LEAVE')], 'Reason For Leaving', tracking=True)
     resigned_notice_period = fields.Integer('Resigned Notice Period', tracking=True)
     tentative_leaving_date = fields.Date('Tentative Leaving Date', tracking=True)
+    physically_challenged = fields.Boolean('Physically Challenged', tracking=True)
 
     @api.depends('slip_ids', 'payslip_count')
     def _compute_emp_gratuity(self):
