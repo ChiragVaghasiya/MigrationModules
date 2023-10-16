@@ -13,3 +13,5 @@ access_payslip_file_wizard,access_payslip.file.wizard,model_payslip_file_wizard,
 access_employee_full_final,access.employee.full.final,model_employee_full_final,,1,1,1,1
 access_check_attendance_shortfall,access.check.attendance.shortfall,model_check_attendance_shortfall,,1,1,1,1
 access_hr_attendance_shortfall,access.hr.attendance.shortfall,model_hr_attendance_shortfall,,1,1,1,1
+
+access_group_user,Access User,model_payslip_confirm,hr_payroll_community.group_hr_payroll_community_user,1,1,1,1

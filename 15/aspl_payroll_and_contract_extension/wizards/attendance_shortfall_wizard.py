@@ -1,11 +1,9 @@
+# -*- coding: utf-8 -*-
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 from odoo import fields, models, api, _
-from odoo.exceptions import ValidationError, Warning
-import numpy as np
 from datetime import date, datetime
-from datetime import timedelta
 from dateutil.relativedelta import relativedelta
-import logging
-_logger = logging.getLogger(__name__)
+from odoo.exceptions import ValidationError
 
 
 class PayslipWizards(models.TransientModel):
@@ -24,7 +22,9 @@ class PayslipWizards(models.TransientModel):
     remove_all_salary_hold_emp = fields.Boolean(string='All remove Salary Hold Employee?')
 
     field1 = fields.Char("Field1")
-    state = fields.Selection([('1', 'Leave Approval'), ('2', 'Attendance Shortfall'), ('3', 'Contact Renewal'), ('4', 'Salary Hold'), ('5', 'Full & Final')], default=False)
+    state = fields.Selection(
+        [('1', 'Leave Approval'), ('2', 'Attendance Shortfall'), ('3', 'Contact Renewal'), ('4', 'Salary Hold'),
+         ('5', 'Full & Final')], default=False)
 
     select_all = fields.Boolean("Select All")
     lock_previous_payroll = fields.Boolean("Lock Previous Payroll")
@@ -94,19 +94,19 @@ class PayslipWizards(models.TransientModel):
 
     def check_condition_step(self):
         check_list = ['lock_previous_payroll', 'employee_addition',
-                        'employee_separtion', 'employee_confirmation',
-                        'employee_data_update', 'update_payment_details',
-                        'salary_revisions', 'update_one_time_payment',
-                        'update_one_time_deductions', 'update_any_other_salary_changes',
-                        'loans_update', 'stop_payment', 'update_lop_lwp', 'update_arrears',
-                        'full_final_settlements', 'reimbursement_claims',
-                        'lock_it_declaration', 'download_it_declaration']
+                      'employee_separtion', 'employee_confirmation',
+                      'employee_data_update', 'update_payment_details',
+                      'salary_revisions', 'update_one_time_payment',
+                      'update_one_time_deductions', 'update_any_other_salary_changes',
+                      'loans_update', 'stop_payment', 'update_lop_lwp', 'update_arrears',
+                      'full_final_settlements', 'reimbursement_claims',
+                      'lock_it_declaration', 'download_it_declaration']
         check_dict = self.env['check.attendance.shortfall'].search_read([('id', '=', self.id)])
         count = 0
         bool_list = []
         for i in check_dict[0]:
             if i in check_list:
-                count = count+1
+                count = count + 1
                 if check_dict[0][i]:
                     bool_list.append(True)
                 else:
@@ -115,7 +115,7 @@ class PayslipWizards(models.TransientModel):
             raise ValidationError("Please Tick Check Box")
         else:
             self.state = '1'
-            
+
     def check_attendance(self):
         employee_ids = self.env['hr.employee'].search([('company_id', '=', self.payslip_run_id.company_id.id)])
         contract_ids = self.env['hr.contract'].search([('employee_id', 'in', employee_ids.ids), ('state', '=', 'open')])
@@ -124,7 +124,9 @@ class PayslipWizards(models.TransientModel):
         shortfall_ids_list = []
         for contract_id in contract_ids:
             work_data = contract_id.employee_id.get_work_days_data(day_from, day_to, compute_leaves=True)
-            attend_report_ids = self.env['hr.attendance'].search([('employee_id', '=', contract_id.employee_id.id),('check_in', '>=', day_from),('check_out', '<=', day_to)])
+            attend_report_ids = self.env['hr.attendance'].search(
+                [('employee_id', '=', contract_id.employee_id.id), ('check_in', '>=', day_from),
+                 ('check_out', '<=', day_to)])
 
             working_hours = round(sum(attend_report_ids.mapped('worked_hours')))
 
@@ -132,7 +134,7 @@ class PayslipWizards(models.TransientModel):
                 continue
             else:
                 temp_shortfall = work_data['hours'] - working_hours
-                temp_shortfall_days = temp_shortfall/contract_ids.resource_calendar_id.hours_per_day
+                temp_shortfall_days = temp_shortfall / contract_ids.resource_calendar_id.hours_per_day
                 temp_shortfall_duration = temp_shortfall_days - int(temp_shortfall_days)
                 if temp_shortfall_duration < 0.5 and temp_shortfall_duration > 0.0:
                     temp_shortfall_days = int(temp_shortfall_days) + 0.5
@@ -208,7 +210,6 @@ class PayslipWizards(models.TransientModel):
              ('date_start', '<=', self.payslip_run_id.date_start), ('state', '=', 'open')]).employee_id
         current_company_employee = employee.filtered(
             lambda emp: emp.company_id.id == self.payslip_run_id.company_id.id)
-        _logger.debug("employee List == %s",current_company_employee)
         if current_company_employee:
             current_date = date.today()
             employee_list = []
@@ -253,7 +254,6 @@ class PayslipWizards(models.TransientModel):
                 slip_data = self.env['hr.payslip'].onchange_employee_id(self.payslip_run_id.date_start,
                                                                         self.payslip_run_id.date_end, employee.id,
                                                                         contract_id=False)
-                _logger.debug("slip_data == %s",slip_data)
                 blocked = False
                 if employee in self.employee_ids.employee_id:
                     blocked = True
@@ -274,7 +274,8 @@ class PayslipWizards(models.TransientModel):
                                 'sequence': 6,
                                 'code': 'SHORTFALL',
                                 'number_of_days': shortfall_days,
-                                'number_of_hours': shortfall_days * self.env['hr.contract'].browse(slip_data['value'].get('contract_id')).resource_calendar_id.hours_per_day,
+                                'number_of_hours': shortfall_days * self.env['hr.contract'].browse(
+                                    slip_data['value'].get('contract_id')).resource_calendar_id.hours_per_day,
                                 'contract_id': slip_data['value'].get('contract_id')
                             }
                             work_days.append((0, 0, work_dict))
@@ -296,7 +297,8 @@ class PayslipWizards(models.TransientModel):
 
                 # make full&final employee left
                 if ff_employee:
-                    running_contract = self.env['hr.contract'].search([('employee_id', '=', ff_employee.id), ('state', '=', 'open')])
+                    running_contract = self.env['hr.contract'].search(
+                        [('employee_id', '=', ff_employee.id), ('state', '=', 'open')])
                     if running_contract:
                         running_contract.state = 'close'
                 if full_and_final:

@@ -1,7 +1,7 @@
-from odoo import models, fields, api, _
+# -*- coding: utf-8 -*-
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
+from odoo import models, fields, api
 from num2words import num2words
-# from dateutil.relativedelta import relativedelta
-# from datetime import date
 
 
 class EmployeeFullFinal(models.Model):
@@ -23,7 +23,8 @@ class EmployeeFullFinal(models.Model):
         full_final_emp_obj = super(EmployeeFullFinal, self).create(vals)
 
         # Creating Payslips In Full & Final Employee
-        full_final_emp_payslips = self.env['hr.payslip'].sudo().search([('employee_id', '=', vals['employee_id']), ('date_from', '>=', full_final_emp_obj.resign_date)])
+        full_final_emp_payslips = self.env['hr.payslip'].sudo().search(
+            [('employee_id', '=', vals['employee_id']), ('date_from', '>=', full_final_emp_obj.resign_date)])
         full_final_emp_obj.payslip_line_ids = [(6, 0, full_final_emp_payslips.ids)]
 
         return full_final_emp_obj
@@ -35,7 +36,9 @@ class EmployeeFullFinal(models.Model):
         return f'(Rupees {words} Only)'
 
     def _payslip_obj(self):
-        last_drawn_salary_slip = self.env['hr.payslip'].sudo().search([('employee_id', '=', self.employee_id.id), ('date_from', '>=', self.resign_date)], limit=1, order='id desc')
+        last_drawn_salary_slip = self.env['hr.payslip'].sudo().search(
+            [('employee_id', '=', self.employee_id.id), ('date_from', '>=', self.resign_date)], limit=1,
+            order='id desc')
 
         return last_drawn_salary_slip
 

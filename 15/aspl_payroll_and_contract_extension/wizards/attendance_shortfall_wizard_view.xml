@@ -48,15 +48,20 @@
                             </group>
                             <group>
                                 <field name="update_one_time_payment" nolabel="1"/>
-                                <label for="update_one_time_payment" style="width:250px;">Update One Time Payment</label>
+                                <label for="update_one_time_payment" style="width:250px;">Update One Time Payment
+                                </label>
                             </group>
                             <group>
                                 <field name="update_one_time_deductions" nolabel="1"/>
-                                <label for="update_one_time_deductions" style="width:250px;">Update One Time Deductions</label>
+                                <label for="update_one_time_deductions" style="width:250px;">Update One Time
+                                    Deductions
+                                </label>
                             </group>
                             <group>
                                 <field name="update_any_other_salary_changes" nolabel="1"/>
-                                <label for="update_any_other_salary_changes" style="width:250px;">Update Any Other Salary Changes</label>
+                                <label for="update_any_other_salary_changes" style="width:250px;">Update Any Other
+                                    Salary Changes
+                                </label>
                             </group>
                             <group>
                                 <field name="loans_update" nolabel="1"/>
@@ -78,7 +83,8 @@
                             </group>
                             <group>
                                 <field name="full_final_settlements" nolabel="1"/>
-                                <label for="full_final_settlements" style="width:250px;">Full &amp; Final Settlements</label>
+                                <label for="full_final_settlements" style="width:250px;">Full &amp; Final Settlements
+                                </label>
                             </group>
                             <group>
                                 <field name="reimbursement_claims" nolabel="1"/>
@@ -90,45 +96,57 @@
                             </group>
                             <group>
                                 <field name="download_it_declaration" nolabel="1"/>
-                                <label for="download_it_declaration" style="width:250px;">Download IT Declaration</label>
+                                <label for="download_it_declaration" style="width:250px;">Download IT Declaration
+                                </label>
                             </group>
                         </group>
                     </group>
                     <group attrs="{'invisible': [('state', '!=', '1')]}" string="Not Approved Leaves">
-                        <h5>To process payroll correctly, all leaves needs to be approved/rejected. Please make sure you have rejected the leaves. The payroll process will approve all pending leaves. Click "Next" to proceed with approval.</h5>
+                        <h5>To process payroll correctly, all leaves needs to be approved/rejected. Please make sure you
+                            have rejected the leaves. The payroll process will approve all pending leaves. Click "Next"
+                            to proceed with approval.
+                        </h5>
                         <field name="approve_all_leave" nolabel="1"/>
                         <label for="approve_all_leave" style="width:250px">All Leave Approve?</label>
                     </group>
                     <group attrs="{'invisible': [('state', '!=', '2')]}">
-                            <h5>Attendance Shortfall list</h5>
-                            <br/>
-                            <field name="attendance_shortfall_ids" nolabel="1">
-                                <tree editable="bottom" edit="1">
-                                    <field name="employee_id" readonly="1"/>
-                                    <field name="working_hours" readonly="1"/>
-                                    <field name="actual_hours" readonly="1"/>
-                                    <field name="shortfall" readonly="1"/>
-                                    <field name="checkbox"/>
-                                    <field name="shortfall_days"/>
-                                </tree>
-                            </field>
-    <!--                        <button name="check_attendance" string="Check" type="object"/>-->
+                        <h5>Attendance Shortfall list</h5>
+                        <br/>
+                        <field name="attendance_shortfall_ids" nolabel="1">
+                            <tree editable="bottom" edit="1">
+                                <field name="employee_id" readonly="1"/>
+                                <field name="working_hours" readonly="1"/>
+                                <field name="actual_hours" readonly="1"/>
+                                <field name="shortfall" readonly="1"/>
+                                <field name="checkbox"/>
+                                <field name="shortfall_days"/>
+                            </tree>
+                        </field>
+                        <!--                        <button name="check_attendance" string="Check" type="object"/>-->
                     </group>
                     <group attrs="{'invisible': [('state', '!=', '3')]}" string="Contract Renewal">
-                        <h5>Contracts for following employees/consultants have been created which is applicable to the selected salary period. Make sure contract is updated.</h5>
+                        <h5>Contracts for following employees/consultants have been created which is applicable to the
+                            selected salary period. Make sure contract is updated.
+                        </h5>
                     </group>
                     <group attrs="{'invisible': [('state', '!=', '3')]}">
                         <field name="contract_ids" nolabel="1" readonly="1" widget="many2many_tags"/>
                     </group>
                     <group attrs="{'invisible': [('state', '!=', '4')]}" string="Salary Hold">
-                        <h5>Following employees/consultants are in notice period. No salary has been hold so far. You can remove employees from the list below if you don't want to hold salary. It will hold it for the selected period otherwise</h5>
+                        <h5>Following employees/consultants are in notice period. No salary has been hold so far. You
+                            can remove employees from the list below if you don't want to hold salary. It will hold it
+                            for the selected period otherwise
+                        </h5>
                     </group>
                     <group attrs="{'invisible': [('state', '!=', '4')]}">
                         <field name="remove_all_salary_hold_emp"/>
                         <field name="employee_ids" nolabel="1"/>
                     </group>
                     <group attrs="{'invisible': [('state', '!=', '5')]}" string="Full &amp; Final">
-                        <h5>Following employees/consultants are eligible for the full and final processing. Make sure you want to proceed with them. You can remove employee if you don't want to perform full and final settlement.</h5>
+                        <h5>Following employees/consultants are eligible for the full and final processing. Make sure
+                            you want to proceed with them. You can remove employee if you don't want to perform full and
+                            final settlement.
+                        </h5>
                     </group>
                     <group attrs="{'invisible': [('state', '!=', '5')]}">
                         <field name="full_final_ids" nolabel="1"/>
@@ -136,22 +154,25 @@
                 </sheet>
 
                 <footer>
-                    <button name="go_to_previous_wizard" string="&lt;&lt; Back" type="object" class="btn-primary" attrs="{'invisible': [('state', '=', False)]}"/>
-                    <button name="next_step" string="Next &gt;&gt;" type="object" class="btn-primary" attrs="{'invisible': [('state', '=', '5')]}"/>
-                    <button name="auto_genarate_payslip" string="Generate Payslip" type="object" class="btn-primary" attrs="{'invisible': [('state', '!=', '5')]}"/>
+                    <button name="go_to_previous_wizard" string="&lt;&lt; Back" type="object" class="btn-primary"
+                            attrs="{'invisible': [('state', '=', False)]}"/>
+                    <button name="next_step" string="Next &gt;&gt;" type="object" class="btn-primary"
+                            attrs="{'invisible': [('state', '=', '5')]}"/>
+                    <button name="auto_genarate_payslip" string="Generate Payslip" type="object" class="btn-primary"
+                            attrs="{'invisible': [('state', '!=', '5')]}"/>
                 </footer>
             </form>
         </field>
     </record>
 
     <act_window
-    id="action_greeting_wizard"
-    name="Check Conditions"
-    res_model="check.attendance.shortfall"
-    view_mode="form"
-    target="new"
-    view_id="check_attendance_shortfall_wizard"
-    context="{'default_state': '1'}"
+            id="action_greeting_wizard"
+            name="Check Conditions"
+            res_model="check.attendance.shortfall"
+            view_mode="form"
+            target="new"
+            view_id="check_attendance_shortfall_wizard"
+            context="{'default_state': '1'}"
     />
 
 </odoo>

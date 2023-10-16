@@ -35,16 +35,6 @@
                                         <td style="min-width: 150px;">Joining Date</td>
                                         <td t-esc="o.employee_id.first_contract_date"/>
                                     </tr>
-                                    <!-- <tr>
-                                         <td style=min-width: 150px;>NPS No.</td>
-                                         <td t-esc="o.employee_id.<field_name>"/>
-                                         <td>100473419523</td>
-                                     </tr>
-                                     <tr>
-                                         <td style=min-width: 150px;>PAN No.</td>
-                                         <td t-esc="o.employee_id.<field_name>"/>
-                                         <td>ABCDE1234F</td>
-                                     </tr> -->
                                 </tbody>
                             </table>
                         </div>
@@ -258,15 +248,6 @@
                         </table>
                     </div>
 
-                    <!--div style="border: 1px solid black; border-top: 0; margin: 0; padding: 10px;">
-                        <span style="font-weight: bold;">Net Amount in Words :</span>
-                        <t t-foreach="o.line_ids" t-as="line">
-                            <t t-if="line.name == 'Net Salary'">
-                                <t t-esc="line.total_in_words.title()"/>
-                            </t>
-                        </t>
-                    </div-->
-
                     <div style="height: 100px; margin-top: 10px !important;">
                         <div class="row" style="height: 100px;">
                             <div class="col-6"/>
@@ -296,6 +277,5 @@
             </t>
         </t>
     </template>
-
 
 </odoo>

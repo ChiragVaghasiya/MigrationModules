@@ -1,6 +1,6 @@
-from odoo import models, fields, api, _
-from dateutil.relativedelta import relativedelta
-from datetime import date
+# -*- coding: utf-8 -*-
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
+from odoo import models, fields
 
 
 class AttendanceShortfall(models.TransientModel):
