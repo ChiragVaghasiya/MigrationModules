@@ -175,11 +175,10 @@ class HrPayslipRun(models.Model):
                 payslip_run = self.env['hr.payslip.run'].sudo().search(
                     [('id', '=', int(self.env.context['record_payslip_batch']))])
                 if payslip_run.slip_ids:
-                    template_id = self.env['mail.template'].sudo().search([('name', '=', 'Employee Payslip Mail')])
+                    template_id = self.env.ref('aspl_indian_payroll.employee_payslip_mail_template')
                     for payslip in payslip_run.slip_ids:
                         context = {
                             'mail_to': payslip.employee_id.work_email,
-                            'subject': payslip.name,
                         }
                         template_id.with_context(context).send_mail(payslip.id, force_send=True)
                         self._cr.commit()

@@ -34,7 +34,6 @@
         'data/salary_rule_data.xml',
         'data/salary_structure_data.xml',
         'data/it_declaration_schedule.xml',
-        'views/payslip_mail_template.xml',
         'views/hr_employee_view.xml',
         'views/contract_config_view.xml',
         'views/salary_rule_view.xml',
@@ -48,8 +47,9 @@
         'wizards/payslip_wizard_view.xml',
         'wizards/attendance_shortfall_wizard_view.xml',
         'wizards/hr_payslip_mass_confirm.xml',
-        'reports/payslip_mail_schedule.xml',
         'reports/employee_payslip_report.xml',
+        'reports/employee_bulk_mails.xml',
+        'reports/payslip_mail_template.xml',
         'reports/employee_full_and_final_report.xml',
     ],
     "assets": {
