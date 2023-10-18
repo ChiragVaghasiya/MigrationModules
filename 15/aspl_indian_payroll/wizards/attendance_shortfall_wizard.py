@@ -207,7 +207,7 @@ class PayslipWizards(models.TransientModel):
     def auto_genarate_payslip(self):
         employee = self.env['hr.contract'].search(
             [('date_end', '>=', self.payslip_run_id.date_end),
-             ('date_start', '<=', self.payslip_run_id.date_start), ('state', '=', 'open')]).employee_id
+             ('date_start', '<=', self.payslip_run_id.date_start), ('state', '=', 'open')], order='struct_id').employee_id
         current_company_employee = employee.filtered(
             lambda emp: emp.company_id.id == self.payslip_run_id.company_id.id)
         if current_company_employee:

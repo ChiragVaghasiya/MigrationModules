@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
+
 <templates id="template" xml:space="preserve">
     <t t-name="ItStatementMain">
         <div class="oh_dashboards">
@@ -23,8 +24,10 @@
                    t-value="widget.login_employee['ytd_summary_it_deduction_component_last_employer']"/>
                 <t t-set="ytd_summary_it_deduction_components"
                    t-value="widget.login_employee['ytd_summary_it_deduction_components']"/>
-                <t t-set="tax_amount_old_regime_dict" t-value="widget.login_employee['tax_amount_old_regime_dict']"/>
-                <t t-set="tax_amount_new_regime_dict" t-value="widget.login_employee['tax_amount_new_regime_dict']"/>
+                <t t-set="tax_amount_old_regime_dict"
+                   t-value="widget.login_employee['tax_amount_old_regime_dict']"/>
+                <t t-set="tax_amount_new_regime_dict"
+                   t-value="widget.login_employee['tax_amount_new_regime_dict']"/>
                 <t t-set="it_statement_heading_data" t-value="['Total',4,5,6,7,8,9,10,11,12,1,2,3]"/>
                 <t t-set="section_via" t-value="['80c','80ccd','80d','80other','HRA Exempted Amount']"/>
                 <t t-set="section_16" t-value="['Professional Tax','Standard Deduction']"/>
@@ -186,7 +189,6 @@ G. Deduction Under Chapter VI A
                             </t>
                             <tr class="bold border_m">
                                 <td>
-                                    
                                      H. Less Deduction Under Section 16
                                 </td>
                             </tr>
@@ -320,15 +322,22 @@ F. Gross Total Income ( C + D + E )</td>
                                 </td>
                             </tr>
                             <tr class="bold border_m">
-                                <td style="text-align:left;">
-                                    
-                                    G. Standard Deduction
-                                </td>
-                                <td style="text-align:right;">
-                                    <t t-esc="50000"/>
-                                    <t t-set="new_regine_total" t-value="new_regine_total-50000"/>
+                                <td>
+                                     G. Less Deduction Under Section 16
                                 </td>
                             </tr>
+                            <t t-foreach="section_16" t-as="i">
+                                <tr class="table_data_it_components">
+                                    <td style="padding-left:48px;">
+                                        <t t-esc="i"/>
+                                    </td>
+                                    <td style="text-align:right;">
+                                        <t t-esc="ytd_summary_it_deduction_components[i]"/>
+                                        <t t-set="new_regine_total"
+                                           t-value="new_regine_total - ytd_summary_it_deduction_components[i]"/>
+                                    </td>
+                                </tr>
+                            </t>
                             <tr class="border_m">
                                 <td class="bold table_data_it_components">
                                     
@@ -339,7 +348,6 @@ H. Total Taxable Amount ( F - G )</td>
                             </tr>
                             <tr class="bold border_m">
                                 <td>
-                                    
 I. Annual Tax
                                 </td>
                             </tr>
@@ -367,7 +375,6 @@ I. Annual Tax
                     </table>
                 </div>
             </div>
-
         </div>
     </t>
 </templates>

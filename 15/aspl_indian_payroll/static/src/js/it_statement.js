@@ -27,7 +27,7 @@ odoo.define(
         return this._super().then(function () {
           var def1 = self
             ._rpc({
-              model: "hr.payslip",
+              model: "hr.employee",
               method: "get_user_employee_details_payslip",
             })
             .then(function (result) {

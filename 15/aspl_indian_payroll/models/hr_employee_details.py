@@ -1039,7 +1039,6 @@ class HrEmployee(models.Model):
         return self.company_id.professional_tax
 
     def fee_calculation(self, contract, categories):
-        # _logger.debug("fee_calculation  contract.wage,categories.BONUS,categories.COMP == %s %s %s",contract.wage,categories.BONUS,categories.COMP)
         return contract.wage + categories.BONUS + categories.COMP
 
     def tds_calculation(self, categories):
@@ -1060,6 +1059,129 @@ class HrEmployee(models.Model):
     def net_salary_calculation(self, categories):
         return categories.BASIC + categories.HRA + categories.Other + categories.BONUS + categories.COMP - categories.EE_DED - categories.IT_DED
 
+    def old_regime_calculation(self, taxable_amount, ecess_prev_emp, surcharge_prev_emp, tax_prev_emp, grayhr, total_paid_tax):
+
+        if taxable_amount > 0 and taxable_amount <= 250000:
+            taxo = 0
+        elif taxable_amount > 250000 and taxable_amount <= 500000:
+            taxo = ((taxable_amount - 250000) * .05)
+        elif taxable_amount > 500000 and taxable_amount <= 1000000:
+            taxo = ((taxable_amount - 500000) * .20) + 12500
+        elif taxable_amount > 1000000:
+            taxo = ((taxable_amount - 1000000) * .30) + 112500
+        else:
+            taxo = 0
+
+        if taxable_amount <= 500000:
+            taxo = 0
+        surchargeo = 0
+        if taxable_amount > 5000000 and taxable_amount <= 10000000:
+            surchargeo = taxo * .10
+            # /* check Marginal Relif*/
+            if taxable_amount > 5000000 and taxable_amount <= 5195896:
+                surchargeo = (taxable_amount - 5000000) * .70
+                surchargeo = surchargeo + 0
+                marginalo = "Yes"
+
+        elif taxable_amount > 10000000 and taxable_amount <= 20000000:
+            surchargeo = taxo * .15
+            # /* check Marginal Relif*/
+            if taxable_amount > 10000000 and taxable_amount <= 10214695:
+                surchargeo = (taxable_amount - 10000000) * .70
+                surchargeo = surchargeo + 281250
+                marginalo = "Yes"
+
+        elif taxable_amount > 20000000 and taxable_amount <= 50000000:
+            surchargeo = taxo * .25
+            # /* check Marginal Relif*/
+            if taxable_amount > 20000000 and taxable_amount <= 20930000:
+                surchargeo = (taxable_amount - 20000000) * .70
+                surchargeo = surchargeo + 871875
+                marginalo = "Yes"
+
+        elif taxable_amount > 50000000:
+            surchargeo = taxo * .37
+            # /* check Marginal Relif*/
+            if taxable_amount > 50000000 and taxable_amount <= 53017827:
+                surchargeo = (taxable_amount - 50000000) * .70
+                surchargeo = surchargeo + 3703125
+                marginalo = "Yes"
+        cesso = 0
+        if taxo > 0:
+            cesso = (taxo + surchargeo) * ((self.company_id.cess) / 100)
+        total_cesso = ecess_prev_emp + cesso
+        total_surchargeo = surcharge_prev_emp + surchargeo
+        total_taxo = taxo - total_paid_tax + tax_prev_emp
+        tottaxo = total_taxo + total_cesso + total_surchargeo + grayhr
+
+        return tottaxo, total_taxo, total_cesso, total_surchargeo, grayhr
+
+    def new_regime_calculation(self, taxable_amount, ecess_prev_emp, surcharge_prev_emp, tax_prev_emp, grayhr, total_paid_tax):
+
+        if taxable_amount > 0 and taxable_amount <= 300000:
+            taxo = 0
+        elif taxable_amount > 300000 and taxable_amount <= 600000:
+            taxo = ((taxable_amount - 300000) * .05)
+        elif taxable_amount > 600000 and taxable_amount <= 900000:
+            taxo = ((taxable_amount - 600000) * .10) + 15000
+        elif taxable_amount > 900000 and taxable_amount <= 1200000:
+            taxo = ((taxable_amount - 900000) * .15) + 15000 + 30000
+        elif taxable_amount > 1200000 and taxable_amount <= 1500000:
+            taxo = ((taxable_amount - 1200000) * .20) + 15000 + 30000 + 45000
+        elif taxable_amount > 1500000:
+            taxo = ((taxable_amount - 1500000) * .30) + 15000 + 30000 + 45000 + 60000
+        else:
+            taxo = 0
+
+        if taxable_amount <= 700000:
+            taxo = 0
+        surchargen = 0
+        if taxable_amount > 5000000 and taxable_amount <= 10000000:
+            surchargen = taxo * .10
+            # /* check Marginal Relif*/
+            if taxable_amount > 5000000 and taxable_amount <= 5195896:
+                surchargen = (taxable_amount - 5000000) * .70
+                surchargen = surchargen + 0
+                marginaln = "Yes"
+
+        elif taxable_amount > 10000000 and taxable_amount <= 20000000:
+            surchargen = taxo * .15
+            # /* check Marginal Relif*/
+            if taxable_amount > 10000000 and taxable_amount <= 10214695:
+                surchargen = (taxable_amount - 10000000) * .70
+                surchargen = surchargen + 273750
+                marginaln = "Yes"
+
+        elif taxable_amount > 20000000 and taxable_amount <= 50000000:
+            surchargen = taxo * .25
+            # /* check Marginal Relif*/
+            if taxable_amount > 20000000 and taxable_amount <= 20930000:
+                surchargen = (taxable_amount - 20000000) * .70
+                surchargen = surchargen + 860625
+                marginaln = "Yes"
+
+        elif taxable_amount > 50000000:
+            surchargen = taxo * .25
+            # /* check Marginal Relif*/
+            if taxable_amount > 50000000 and taxable_amount <= 53017827:
+                surchargen = (taxable_amount - 50000000) * .70
+                surchargen = surchargen + 3684375
+                marginaln = "Yes"
+        cessn = 0
+        tottaxo = 0
+        total_taxo = 0
+        total_cessn = 0
+        total_surchargen = 0
+        grayhr = 0
+        if taxo > 0:
+            cessn = (taxo + surchargen) * .04
+            total_cessn = cessn + ecess_prev_emp
+            total_surchargen = surchargen + surcharge_prev_emp
+            total_taxo = taxo - total_paid_tax + tax_prev_emp
+            tottaxo = total_taxo + total_cessn + total_surchargen + grayhr
+
+        return tottaxo, total_taxo, total_cessn, total_surchargen, grayhr
+
     def it_calculation(self, categories, payslip):
         std_dedc = 50000
         remaining_months = self.get_remaining_months(payslip)
@@ -1068,7 +1190,6 @@ class HrEmployee(models.Model):
         totalbasic = dicti.get('BASIC') + categories.BASIC
         totalhra = dicti.get('HRA') + categories.HRA
         rent_paid = dicti.get('PAID_RENT')
-        hra_exempted_amount = 0
         formula = []
         formula_1 = totalhra
         formula_2 = totalbasic * 0.5
@@ -1086,6 +1207,7 @@ class HrEmployee(models.Model):
         surcharge_prev_emp = declaration.get('surcharge')
         ecess_prev_emp = declaration.get('ecess')
         total_paid_tax = self.cummulative_tax()
+
         pt = 0
         if declaration.get('previous_employer_professional_tax') != 0:
             pt += declaration.get('previous_employer_professional_tax')
@@ -1096,125 +1218,18 @@ class HrEmployee(models.Model):
         else:
             pt = 2400
 
-        taxo = 0
-        tottaxo = 0
-        surchargeo = 0
-
         if regime == 'old_regime':
             taxable_amount = (self.cummulative_details(
                 payslip) + categories.BASIC + categories.HRA + categories.Other + categories.BONUS + categories.COMP - hra_exempted_amount - std_dedc - declaration.get(
                 '80c') - declaration.get('80ccd') - declaration.get('80d') - declaration.get(
                 '80other') + declaration.get('income_lose_house_property') + declaration.get(
                 'other_income') + declaration.get('income_previous_employer') - pt)
-            if taxable_amount > 0 and taxable_amount <= 250000:
-                taxo = 0
-            elif taxable_amount > 250000 and taxable_amount <= 500000:
-                taxo = ((taxable_amount - 250000) * .05)
-            elif taxable_amount > 500000 and taxable_amount <= 1000000:
-                taxo = ((taxable_amount - 500000) * .20) + 12500
-            elif taxable_amount > 1000000:
-                taxo = ((taxable_amount - 1000000) * .30) + 112500
-            else:
-                taxo = 0
-
-            if taxable_amount <= 500000:
-                taxo = 0
-            surchargeo = 0
-            if taxable_amount > 5000000 and taxable_amount <= 10000000:
-                surchargeo = taxo * .10
-                # /* check Marginal Relif*/
-                if taxable_amount > 5000000 and taxable_amount <= 5195896:
-                    surchargeo = (taxable_amount - 5000000) * .70
-                    surchargeo = surchargeo + 0
-                    marginalo = "Yes"
-
-            elif taxable_amount > 10000000 and taxable_amount <= 20000000:
-                surchargeo = taxo * .15
-                # /* check Marginal Relif*/
-                if taxable_amount > 10000000 and taxable_amount <= 10214695:
-                    surchargeo = (taxable_amount - 10000000) * .70
-                    surchargeo = surchargeo + 281250
-                    marginalo = "Yes"
-
-            elif taxable_amount > 20000000 and taxable_amount <= 50000000:
-                surchargeo = taxo * .25
-                # /* check Marginal Relif*/
-                if taxable_amount > 20000000 and taxable_amount <= 20930000:
-                    surchargeo = (taxable_amount - 20000000) * .70
-                    surchargeo = surchargeo + 871875
-                    marginalo = "Yes"
-
-            elif taxable_amount > 50000000:
-                surchargeo = taxo * .37
-                # /* check Marginal Relif*/
-                if taxable_amount > 50000000 and taxable_amount <= 53017827:
-                    surchargeo = (taxable_amount - 50000000) * .70
-                    surchargeo = surchargeo + 3703125
-                    marginalo = "Yes"
-            cesso = 0
-            if taxo > 0:
-                cesso = (taxo + surchargeo) * ((self.company_id.cess) / 100)
-            total_cesso = ecess_prev_emp + cesso
-            total_surchargeo = surcharge_prev_emp + surchargeo
-            total_taxo = taxo - total_paid_tax + tax_prev_emp
-            tottaxo = total_taxo + total_cesso + total_surchargeo + grayhr
+            old_regime_tax = self.old_regime_calculation(taxable_amount, ecess_prev_emp, surcharge_prev_emp, tax_prev_emp, grayhr, total_paid_tax)
+            tottaxo = old_regime_tax[0]
         else:
             taxable_amount = self.cummulative_details(
-                payslip) + categories.BASIC + categories.HRA + categories.Other + categories.BONUS + categories.COMP - std_dedc
-            if taxable_amount > 0 and taxable_amount <= 300000:
-                taxo = 0
-            elif taxable_amount > 300000 and taxable_amount <= 600000:
-                taxo = ((taxable_amount - 300000) * .05)
-            elif taxable_amount > 600000 and taxable_amount <= 900000:
-                taxo = ((taxable_amount - 600000) * .10) + 15000
-            elif taxable_amount > 900000 and taxable_amount <= 1200000:
-                taxo = ((taxable_amount - 900000) * .15) + 15000 + 30000
-            elif taxable_amount > 1200000 and taxable_amount <= 1500000:
-                taxo = ((taxable_amount - 1200000) * .20) + 15000 + 30000 + 45000
-            elif taxable_amount > 1500000:
-                taxo = ((taxable_amount - 1500000) * .30) + 15000 + 30000 + 45000 + 60000
-            else:
-                taxo = 0
+                payslip) + categories.BASIC + categories.HRA + categories.Other + categories.BONUS + categories.COMP - std_dedc - pt
+            old_regime_tax = self.new_regime_calculation(taxable_amount, ecess_prev_emp, surcharge_prev_emp, tax_prev_emp, grayhr, total_paid_tax)
+            tottaxo = old_regime_tax[0]
 
-            if taxable_amount <= 700000:
-                taxo = 0
-            surchargen = 0
-            if taxable_amount > 5000000 and taxable_amount <= 10000000:
-                surchargen = taxo * .10
-                # /* check Marginal Relif*/
-                if taxable_amount > 5000000 and taxable_amount <= 5195896:
-                    surchargen = (taxable_amount - 5000000) * .70
-                    surchargen = surchargen + 0
-                    marginaln = "Yes"
-
-            elif taxable_amount > 10000000 and taxable_amount <= 20000000:
-                surchargen = taxo * .15
-                # /* check Marginal Relif*/
-                if taxable_amount > 10000000 and taxable_amount <= 10214695:
-                    surchargen = (taxable_amount - 10000000) * .70
-                    surchargen = surchargen + 273750
-                    marginaln = "Yes"
-
-            elif taxable_amount > 20000000 and taxable_amount <= 50000000:
-                surchargen = taxo * .25
-                # /* check Marginal Relif*/
-                if taxable_amount > 20000000 and taxable_amount <= 20930000:
-                    surchargen = (taxable_amount - 20000000) * .70
-                    surchargen = surchargen + 860625
-                    marginaln = "Yes"
-
-            elif taxable_amount > 50000000:
-                surchargen = taxo * .25
-                # /* check Marginal Relif*/
-                if taxable_amount > 50000000 and taxable_amount <= 53017827:
-                    surchargen = (taxable_amount - 50000000) * .70
-                    surchargen = surchargen + 3684375
-                    marginaln = "Yes"
-            cessn = 0
-            if taxo > 0:
-                cessn = (taxo + surchargen) * .04
-                total_cessn = cessn + ecess_prev_emp
-                total_surchargen = surchargen + surcharge_prev_emp
-                total_taxo = taxo - total_paid_tax + tax_prev_emp
-                tottaxo = total_taxo + total_cessn + total_surchargen + grayhr
         return round(tottaxo / remaining_months)

@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 import calendar
-from datetime import datetime, date
 import fiscalyear
 from odoo import models, api
+from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 from odoo.http import request
 
 
-class HrPayslip(models.Model):
-    _inherit = 'hr.payslip'
+class HrEmoloyee(models.Model):
+    _inherit = 'hr.employee'
 
     @api.model
     def get_user_employee_details_payslip(self):
@@ -116,8 +116,6 @@ class HrPayslip(models.Model):
                 total_of_months = 0
                 ytd_summary_it_statement_data[i][j] = dict(items)
 
-        # temp_dict2 = {}
-        # counter2 = True
         for i in ytd_summary_it_statement_data:
             temp_dict = {}
             for j in ytd_summary_it_statement_data[i]:
@@ -130,28 +128,11 @@ class HrPayslip(models.Model):
                     else:
                         temp_dict['Total'] = {key: value}
             ytd_summary_it_statement_data.get(i).update(temp_dict)
-        #     if counter2==True:
-        #         for p in temp_dict:
-        #             for q,r in temp_dict[p].items():
-        #                 if temp_dict2.get(p):
-        #                     if temp_dict2.get(p).get(q):
-        #                         pass
-        #                     else:
-        #                         temp_dict2[p][q] = r
-        #                 else:
-        #                     temp_dict2[p] = {q:r}
-        #     else :
-        #         for k in temp_dict:
-        #             for key,value in temp_dict[k].items():
-        #                 temp_dict2[k][key] -= value
-        #     counter2=False
-        # ytd_summary_it_statement_data['Grand Total'] = temp_dict2
-        # counter2=True
 
+        # Tax Calculation
         taxable_amount = ytd_summary_it_statement_data['Income']['Total']['Total']
         it_declaration_info = employee.get_it_statement_info(current_date)
-        ytd_summary_it_deduction_components = it_declaration_info[0]
-        del ytd_summary_it_deduction_components['regime']
+        it_components = it_declaration_info[0]
 
         ytd_summary_it_deduction_component_last_employer = {}
         ytd_summary_it_deduction_component_last_employer['Total Income After Exemptions'] = it_declaration_info[
@@ -163,8 +144,7 @@ class HrPayslip(models.Model):
 
         totalbasic = ytd_summary_it_statement_data['Income']['Basic Salary']['Total']
         totalhra = ytd_summary_it_statement_data['Income']['House Rent Allowance']['Total']
-        rent_paid = ytd_summary_it_deduction_components['house_rent']
-        hra_exempted_amount = 0
+        rent_paid = it_components['house_rent']
         formula = []
         formula_1 = totalhra
         formula_2 = totalbasic * 0.5
@@ -174,140 +154,70 @@ class HrPayslip(models.Model):
         formula.append(formula_2)
         formula.append(formula_3)
         hra_exempted_amount = min(formula)
-        ytd_summary_it_deduction_components['HRA Exempted Amount'] = hra_exempted_amount
-        del ytd_summary_it_deduction_components['house_rent']
 
-        ytd_summary_it_deduction_components['Professional Tax'] = 2400
+        grayhr = it_components.get('grayhr')
+        tax_prev_emp = it_components.get('tax_on_income')
+        surcharge_prev_emp = it_components.get('surcharge')
+        ecess_prev_emp = it_components.get('ecess')
+        total_paid_tax = employee.cummulative_tax()
+
+        pt = 0
+        if it_components.get('previous_employer_professional_tax') != 0:
+            pt += it_components.get('previous_employer_professional_tax')
+            if employee.join_date.month >= 4:
+                pt += (16 - employee.join_date.month) * 200
+            else:
+                pt += (4 - employee.join_date.month) * 200
+        else:
+            pt = 2400
         standard_deduction = 50000
-        ytd_summary_it_deduction_components['Standard Deduction'] = standard_deduction
 
-        ytd_summary_it_income_components = {'Other Income': ytd_summary_it_deduction_components['other_income'],
-                                            'Income Lose House Property': ytd_summary_it_deduction_components[
-                                                'income_lose_house_property']}
-        del ytd_summary_it_deduction_components['other_income']
-        del ytd_summary_it_deduction_components['income_lose_house_property']
+        ytd_summary_it_deduction_components = {}
+        ytd_summary_it_deduction_components = {'HRA Exempted Amount': hra_exempted_amount, 'Professional Tax': pt, 'Standard Deduction': standard_deduction, '80c': it_components['80c'], '80ccd': it_components['80ccd'], '80d': it_components['80d'], '80other': it_components['80other']}
+
+        ytd_summary_it_income_components = {'Other Income': it_components['other_income'], 'Income Lose House Property': it_components['income_lose_house_property']}
 
         # ===================================== OLD REGIME =====================================
-        taxo = 0
-        tottaxo = 0
-        surchargeo = 0
         for key, values in ytd_summary_it_deduction_components.items():
             taxable_amount -= values
         for key, values in ytd_summary_it_income_components.items():
             taxable_amount += values
         taxable_amount += ytd_summary_it_deduction_component_last_employer['Total Income After Exemptions']
 
-        if taxable_amount > 0 and taxable_amount <= 250000:
-            taxo = 0
-        elif taxable_amount > 250000 and taxable_amount <= 500000:
-            taxo = ((taxable_amount - 250000) * .05)
-        elif taxable_amount > 500000 and taxable_amount <= 1000000:
-            taxo = ((taxable_amount - 500000) * .20) + 12500
-        elif taxable_amount > 1000000:
-            taxo = ((taxable_amount - 1000000) * .30) + 112500
-        else:
-            taxo = 0
-
-        if taxable_amount <= 500000:
-            taxo = 0
-        surchargeo = 0
-        if taxable_amount > 5000000 and taxable_amount <= 10000000:
-            surchargeo = taxo * .10
-            # /* check Marginal Relif*/
-            if taxable_amount > 5000000 and taxable_amount <= 5195896:
-                surchargeo = (taxable_amount - 5000000) * .70
-                surchargeo = surchargeo + 0
-        elif taxable_amount > 10000000 and taxable_amount <= 20000000:
-            surchargeo = taxo * .15
-            # /* check Marginal Relif*/
-            if taxable_amount > 10000000 and taxable_amount <= 10214695:
-                surchargeo = (taxable_amount - 10000000) * .70
-                surchargeo = surchargeo + 281250
-        elif taxable_amount > 20000000 and taxable_amount <= 50000000:
-            surchargeo = taxo * .25
-            # /* check Marginal Relif*/
-            if taxable_amount > 20000000 and taxable_amount <= 20930000:
-                surchargeo = (taxable_amount - 20000000) * .70
-                surchargeo = surchargeo + 871875
-        elif taxable_amount > 50000000:
-            surchargeo = taxo * .37
-            # /* check Marginal Relif*/
-            if taxable_amount > 50000000 and taxable_amount <= 53017827:
-                surchargeo = (taxable_amount - 50000000) * .70
-                surchargeo = surchargeo + 3703125
-        cesso = 0
-        if taxo > 0:
-            cesso = (taxo + surchargeo) * .04
-        tottaxo = taxo + cesso + surchargeo
+        old_regime_tax = employee.old_regime_calculation(taxable_amount, ecess_prev_emp, surcharge_prev_emp, tax_prev_emp, grayhr, total_paid_tax)
+        taxo_old_regime = old_regime_tax[1]
+        surchargeo_old_regime = old_regime_tax[3]
+        cesso_old_regime = old_regime_tax[2]
+        grayhr_old_regime = old_regime_tax[4]
+        tottaxo_old_regime = old_regime_tax[0]
 
         # ===================================== NEW REGIME =====================================
-        taxo_new_regime = 0
-        tottaxo_new_regime = 0
-        surchargen_new_regime = 0
         taxable_amount_new_regime = ytd_summary_it_statement_data['Income']['Total']['Total']
-
         for key, values in ytd_summary_it_income_components.items():
             taxable_amount_new_regime += values
         taxable_amount_new_regime += ytd_summary_it_deduction_component_last_employer['Total Income After Exemptions']
         taxable_amount_new_regime -= standard_deduction
+        taxable_amount_new_regime -= pt
 
-        if taxable_amount_new_regime > 0 and taxable_amount_new_regime <= 300000:
-            taxo_new_regime = 0
-        elif taxable_amount_new_regime > 300000 and taxable_amount_new_regime <= 600000:
-            taxo_new_regime = ((taxable_amount_new_regime - 300000) * .05)
-        elif taxable_amount_new_regime > 600000 and taxable_amount_new_regime <= 900000:
-            taxo_new_regime = ((taxable_amount_new_regime - 600000) * .10) + 15000
-        elif taxable_amount_new_regime > 900000 and taxable_amount_new_regime <= 1200000:
-            taxo_new_regime = ((taxable_amount_new_regime - 900000) * .15) + 15000 + 30000
-        elif taxable_amount_new_regime > 1200000 and taxable_amount_new_regime <= 1500000:
-            taxo_new_regime = ((taxable_amount_new_regime - 1200000) * .20) + 15000 + 30000 + 45000
-        elif taxable_amount_new_regime > 1500000:
-            taxo_new_regime = ((taxable_amount_new_regime - 1500000) * .30) + 15000 + 30000 + 45000 + 60000
-        else:
-            taxo_new_regime = 0
+        new_regime_tax = employee.new_regime_calculation(taxable_amount_new_regime, ecess_prev_emp, surcharge_prev_emp, tax_prev_emp, grayhr, total_paid_tax)
+        taxo_new_regime = new_regime_tax[1]
+        surchargen_new_regime = new_regime_tax[3]
+        cessn_new_regime = new_regime_tax[2]
+        grayhr_new_regime = new_regime_tax[4]
+        tottaxo_new_regime = new_regime_tax[0]
 
-        if taxable_amount_new_regime <= 700000:
-            taxo_new_regime = 0
-        surchargen_new_regime = 0
-        if taxable_amount_new_regime > 5000000 and taxable_amount_new_regime <= 10000000:
-            surchargen_new_regime = taxo_new_regime * .10
-            # /* check Marginal Relif*/
-            if taxable_amount_new_regime > 5000000 and taxable_amount_new_regime <= 5195896:
-                surchargen_new_regime = (taxable_amount_new_regime - 5000000) * .70
-                surchargen_new_regime = surchargen_new_regime + 0
-        elif taxable_amount_new_regime > 10000000 and taxable_amount_new_regime <= 20000000:
-            surchargen_new_regime = taxo_new_regime * .15
-            # /* check Marginal Relif*/
-            if taxable_amount_new_regime > 10000000 and taxable_amount_new_regime <= 10214695:
-                surchargen_new_regime = (taxable_amount_new_regime - 10000000) * .70
-                surchargen_new_regime = surchargen_new_regime + 273750
-        elif taxable_amount_new_regime > 20000000 and taxable_amount_new_regime <= 50000000:
-            surchargen_new_regime = taxo_new_regime * .25
-            # /* check Marginal Relif*/
-            if taxable_amount_new_regime > 20000000 and taxable_amount_new_regime <= 20930000:
-                surchargen_new_regime = (taxable_amount_new_regime - 20000000) * .70
-                surchargen_new_regime = surchargen_new_regime + 860625
-        elif taxable_amount_new_regime > 50000000:
-            surchargen_new_regime = taxo_new_regime * .25
-            # /* check Marginal Relif*/
-            if taxable_amount_new_regime > 50000000 and taxable_amount_new_regime <= 53017827:
-                surchargen_new_regime = (taxable_amount_new_regime - 50000000) * .70
-                surchargen_new_regime = surchargen_new_regime + 3684375
-        cessn_new_regime = 0
-        if taxo_new_regime > 0:
-            cessn_new_regime = (taxo_new_regime + surchargen_new_regime) * .04
-            tottaxo_new_regime = taxo_new_regime + cessn_new_regime + surchargen_new_regime
-
-        # if taxable_amount < 0:
-        #     taxable_amount = 0
-        # if tottaxo_new_regime < 0:
-        #     tottaxo_new_regime = 0
-        tax_amount_old_regime_dict = {'Raw Tax': "{:.2f}".format(taxo), 'Surcharge': "{:.2f}".format(surchargeo),
-                                      'Health & Edu.Cess': "{:.2f}".format(cesso),
-                                      'Total Tax Amount': "{:.2f}".format(tottaxo)}
+        if taxable_amount < 0:
+            taxable_amount = 0
+        if taxable_amount_new_regime < 0:
+            taxable_amount_new_regime = 0
+        tax_amount_old_regime_dict = {'Raw Tax': "{:.2f}".format(taxo_old_regime), 'Surcharge': "{:.2f}".format(surchargeo_old_regime),
+                                      'Health & Edu.Cess': "{:.2f}".format(cesso_old_regime),
+                                      'Accumulated Gratuity(From previous system)': "{:.2f}".format(grayhr_old_regime),
+                                      'Total Tax Amount': "{:.2f}".format(tottaxo_old_regime)}
         tax_amount_new_regime_dict = {'Raw Tax': "{:.2f}".format(taxo_new_regime),
                                       'Surcharge': "{:.2f}".format(surchargen_new_regime),
                                       'Health & Edu.Cess': "{:.2f}".format(cessn_new_regime),
+                                      'Accumulated Gratuity(From previous system)': "{:.2f}".format(grayhr_new_regime),
                                       'Total Tax Amount': "{:.2f}".format(tottaxo_new_regime)}
 
         if employee:
