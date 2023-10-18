@@ -187,7 +187,6 @@ class HrPayslipRun(models.Model):
     def close_payslip_run(self):
         close_call = super(HrPayslipRun, self).close_payslip_run()
         if self.slip_ids:
-            cron = self.env.ref('aspl_indian_payroll.ir_cron_employee_payslip_queue')
             context = {
                 'record_payslip_batch': self.id,
                 'from_backend': True
