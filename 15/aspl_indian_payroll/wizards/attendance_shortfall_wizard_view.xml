@@ -103,7 +103,7 @@
                     </group>
                     <group attrs="{'invisible': [('state', '!=', '1')]}" string="Not Approved Leaves">
                         <h5>To process payroll correctly, all leaves needs to be approved/rejected. Please make sure you
-                        have rejected the leaves. The payroll process will approve all pending leaves. Click "Next"
+                        have rejected the leaves. The payroll process will approve all pending leaves if All Leave Approve check box is checked. Click "Next"
                         to proceed with approval.
                         </h5>
                     </group>
