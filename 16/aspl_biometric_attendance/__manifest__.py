@@ -6,10 +6,11 @@
 #
 ###############################################################################
 {
-    "name": "Aspire Biometric Attendance",
+    "name": "ESSL Biometric Attendance",
     "category": "Attendance",
     "summary": "Live attendance updates from ESSL attendance device.",
     "version": "16.0.0.1.0",
+    "price": 19.99,
     "license": "AGPL-3",
     'description': """
         ESSL biometric devices are quite popular for attendance management. This modules provides integration between ESSL device and Odoo attendance module. It provides you almost live view of presence.

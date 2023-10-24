@@ -10,6 +10,7 @@
     "category": "Accounting",
     "summary": "Update currencies with live rates using ExachangeRatesAPIs.",
     "version": "16.0.0.1.0",
+    "price": 19.99,
     "license": "AGPL-3",
     'description': """
         This module helps you to keep track of live currency rates using Exchange Rate APIs(put a link to website). Generate an API key from Exchange Rate APIs portal by simply registering to it and configure it in settings. You are all done!!

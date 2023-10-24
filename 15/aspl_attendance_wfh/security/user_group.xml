@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!--Rule: WFH for Attendance Manager: Access All records-->
+        <record id="rule_attendance_wfh_all_manager" model="ir.rule">
+            <field name="name">Approve Employee Attendance Work From Home by Manager</field>
+            <field name="model_id" ref="model_attendance_work_from_home"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4,ref('hr_attendance.group_hr_attendance_manager'))]"/>
+        </record>
+
+        <!--Rule: WFH for Attendance Manager: Access All records-->
+        <record id="rule_attendance_wfh_all_manager" model="ir.rule">
+            <field name="name">Approve Employee Attendance Work From Home by Manager</field>
+            <field name="model_id" ref="model_application_work_from_home"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4,ref('hr_attendance.group_hr_attendance_manager'))]"/>
+        </record>
+
+        <!--Rule: WFH Application for Manual Attendance, Officer and Manager: Access Own records-->
+        <record id="user_attendance_wfh_record" model="ir.rule">
+            <field name="name">User Attendance wfh Application Record</field>
+            <field name="model_id" ref="model_application_work_from_home"/>
+            <field name="domain_force">[('employee_id.user_id','=',user.id)]</field>
+            <field name="groups"
+                   eval="[(4,ref('hr_attendance.group_hr_attendance')),(4,ref('hr_attendance.group_hr_attendance_user')),(4,ref('hr_attendance.group_hr_attendance_manager'))]"/>
+        </record>
+        <!--Rule: Show attendance wfh records to Reporting Authority-->
+        <record id="rule_attendance_wfh_reporting_authority" model="ir.rule">
+            <field name="name">Show Attendance WFH Application records to Reporting Authority</field>
+            <field name="model_id" ref="model_application_work_from_home"/>
+            <field name="domain_force">
+                ['|',('employee_id.user_id','=',user.id),('employee_id.parent_id.user_id','=',user.id)]
+            </field>
+            <field name="groups" eval="[(4,ref('hr_attendance.group_hr_attendance_user'))]"/>
+        </record>
+    </data>
+</odoo>

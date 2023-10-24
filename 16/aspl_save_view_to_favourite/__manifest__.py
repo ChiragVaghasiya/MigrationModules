@@ -7,14 +7,15 @@
 ###############################################################################
 {
     'name': 'Save View to favourite',
-    'category': 'Hidden/Tools',
+    'category': 'Extra Tools',
     'summary': 'Get the view loaded as is the way you marked it favourite.',
     'version': '16.0.0.1.0',
+    "price": 19.99,
     "license": "AGPL-3",
     'description': """
         In Odoo, when you filter/group data and save it as favorites, Odoo doesn't remember the view name. This module loads the same view & grouping as you had while saving it as favorite.
     """,
-    'author': 'Aspire Softserv Pvt. Ltd.',
+    'author': 'Aspire Softserv Pvt. Ltd',
     'website': 'https://www.aspiresoftserv.com/',
     'depends': ['base','web',],
     'assets': {

@@ -10,6 +10,7 @@
     "category": "Attendance",
     "summary": "Attendance tracking for work from home employees.",
     "version": "16.0.0.1.0",
+    "price": 5.99,
     "license": "AGPL-3",
     'description': """
         Attendance tracking of the employees who work from home is a challenge for any company. This module solves the issue for companies which have hybrid model or completely work from home model. Employees can request work from home permission and fill in the logs for the work done.

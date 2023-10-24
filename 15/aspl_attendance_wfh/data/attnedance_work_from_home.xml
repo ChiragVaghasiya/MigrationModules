@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record model="ir.cron" id="auto_approve_work_from_home_cron">
+            <field name="name">Auto Approve Work From Home</field>
+            <field name="model_id" ref="model_attendance_work_from_home"/>
+            <field name="state">code</field>
+            <field name="code">model.auto_approve_attnedance_work_from_home_schedular()</field>
+            <field name="priority">1</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+        </record>
+    </data>
+</odoo>
