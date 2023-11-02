@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record model="ir.ui.view" id="view_task_enhancement">
+        <field name="name">view.task.enhancement</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='email_cc']" position="after">
+                <field name="linked_in_profile" string="LinkedIn Profile"/>
+                <field name="company_linkedin_url" string="Company LinkedIn URL"/>
+            </xpath>
+
+            <xpath expr="//group[@name='lead_priority']" position="inside">
+                <field name="followup_id"/>
+                <field name="followup_start_date"/>
+                <field name="last_followup_send_date" readonly="1"/>
+                <field name="followup_replay_date" readonly="1"/>
+            </xpath>
+
+            <xpath expr="//field[@name='source_id']" position="after">
+                <field name="source_by"/>
+            </xpath>
+            <xpath expr="//field[@name='team_id']" position="after">
+                <field name="direction"/>
+                <field name="industry_id"/>
+                <field name="revenue"/>
+            </xpath>
+            <xpath expr="//field[@name='country_id']" position="replace">
+                <div class="o_row">
+                    <field name="country_id" placeholder="Country" options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
+                    <field name="zone" placeholder="Zone" options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
+                </div>
+            </xpath>
+
+            <xpath expr="//page[@name='internal_notes']" position="after">
+                <page string="Followup History" name="followup_history">
+                    <field name="followup_history_line_ids" nolabel="1">
+                        <tree create="0" update="0">
+                            <field name="email_from"/>
+                            <field name="email_to"/>
+                            <field name="send_on"/>
+                            <field name="replay_date"/>
+                        </tree>
+                        <form>
+                            <group>
+                                <field name="followup_history_id" invisible="1" readonly="True"/>
+                                <field name="message_id" readonly="True"/>
+                                <field name="email_from" readonly="True"/>
+                                <field name="email_to" readonly="True"/>
+                                <field name="content" readonly="True"/>
+                                <field name="send_on" readonly="True"/>
+                                <field name="replay_date" readonly="True"/>
+                            </group>
+                        </form>
+                    </field>
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

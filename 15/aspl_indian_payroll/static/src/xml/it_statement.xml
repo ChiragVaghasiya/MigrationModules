@@ -377,4 +377,19 @@ I. Annual Tax
             </div>
         </div>
     </t>
+
+    <t t-name="EmployeeWarningPayroll">
+        <div>
+            <p>Error : Could not find employee linked to user</p>
+            <p>Please contact system admin for the setup</p>
+        </div>
+    </t>
+
+    <t t-name="PayslipWarningPayroll">
+        <div>
+            <p>Error : Could not find employee payslip or it declaration</p>
+            <p>Please contact system admin for the setup</p>
+        </div>
+    </t>
+
 </templates>

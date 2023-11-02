@@ -48,14 +48,27 @@ odoo.define(
       },
 
       render_dashboards: function () {
-        var self = this;
-        var templates = ["ItStatement"];
+      var self = this;
+      var templates = [];
+      if (this.login_employee == "Employee Not Found...") {
+        self
+          .$(".o_hr_dashboard")
+          .append(QWeb.render("EmployeeWarningPayroll", { widget: self }));
+      }
+      else if (this.login_employee == "Employee Payslip or It Declaration Not Found...") {
+        self
+          .$(".o_hr_dashboard")
+          .append(QWeb.render("PayslipWarningPayroll", { widget: self }));
+      }
+      else {
+        templates = ["ItStatement"];
         _.each(templates, function (template) {
           self
             .$(".o_hr_dashboard")
             .append(QWeb.render(template, { widget: self }));
         });
-      },
+      }
+    },
 
       update_cp: function () {
         var self = this;
