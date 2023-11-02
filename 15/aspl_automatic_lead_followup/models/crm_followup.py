@@ -1,10 +1,10 @@
+# -*- coding: utf-8 -*-
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
+import html
 from odoo import models, fields, api, _
 from datetime import date, datetime
 from dateutil.relativedelta import relativedelta
-import logging
-import html
 
-_logger = logging.getLogger(__name__)
 
 class CrmFollowup(models.Model):
     _name = "crm.followup"
@@ -41,13 +41,13 @@ class CrmFollowup(models.Model):
         if employee_id:
 
             url = self.env['ir.config_parameter'].get_param('web.base.url')
-            email_image = self.env.ref('aspl_crm.email_image_record').sudo().id
-            location_image = self.env.ref('aspl_crm.location_image_record').sudo().id
-            phone_image = self.env.ref('aspl_crm.phone_image_record').sudo().id
-            right_arrow_image = self.env.ref('aspl_crm.right_arrow_image_record').sudo().id
-            website_image = self.env.ref('aspl_crm.website_image_record').sudo().id
+            email_image = self.env.ref('aspl_automatic_lead_followup.email_image_record').sudo().id
+            location_image = self.env.ref('aspl_automatic_lead_followup.location_image_record').sudo().id
+            phone_image = self.env.ref('aspl_automatic_lead_followup.phone_image_record').sudo().id
+            right_arrow_image = self.env.ref('aspl_automatic_lead_followup.right_arrow_image_record').sudo().id
+            website_image = self.env.ref('aspl_automatic_lead_followup.website_image_record').sudo().id
 
-            body_content = body_content + f'</br></br><div style="margin-bottom:-24px;"><table style="border-collapse:collapse"><tbody><tr><td><table style="border-collapse:collapse"><tbody><tr><td><table style="border-collapse:collapse"><tbody><tr><td><strong style="font-weight:bolder">{employee_id.name} |&nbsp;</strong>{employee_id.job_title}</td><td><a href="https://aspiresoftserv.com/" target="_blank" rel="noopener noreferrer" data-auth="NotApplicable" style="text-decoration:none; background-color:transparent; color:#556ee6" data-linkindex="0"><img data-imagetype="External" src="https://aspiresoftserv.com/_next/static/media/aspire-logo-color.7b236c07.svg" width="0" height="0" style="border-style:none; vertical-align:middle; width:auto; height:auto"></a></td></tr></tbody></table></td></tr></tbody></table></td></tr><tr><td><table style="border-collapse:collapse"><tbody><tr><td><table style="border-collapse:collapse"><tbody><tr><td><table style="border-collapse:collapse"><tbody><tr><td><p style="margin:0px; font-size:13px; font-family:&quot;Lucida Grande&quot;,Helvetica,Verdana,Arial,sans-serif"><img data-imagetype="External" src="{url}/web/image/ir.attachment/{phone_image}/datas" width="24" height="24" style="border-style:none; vertical-align:middle; width:24px; height:24px">&nbsp;{employee_id.per_phone1}&nbsp;&nbsp;&nbsp;<img data-imagetype="External" src="{url}/web/image/ir.attachment/{website_image}/datas"" width="24" height="24" style="border-style:none; vertical-align:middle; width:24px; height:24px">&nbsp;<a href="{employee_id.company_id.website}" target="_blank" rel="noopener noreferrer" data-auth="NotApplicable" style="text-decoration:none; background-color:transparent; color:#556ee6" data-linkindex="1">{employee_id.company_id.website}</a></p></td></tr><tr><td><p style="margin:0px; font-size:13px; font-family:&quot;Lucida Grande&quot;,Helvetica,Verdana,Arial,sans-serif"><img data-imagetype="External" src="{url}/web/image/ir.attachment/{email_image}/datas" width="24" height="24" style="border-style:none; vertical-align:middle; width:24px; height:24px">&nbsp;{employee_id.work_email}</p></td></tr><tr><td><p style="margin:0px; font-size:13px; font-family:&quot;Lucida Grande&quot;,Helvetica,Verdana,Arial,sans-serif"><img data-imagetype="External" src="{url}/web/image/ir.attachment/{location_image}/datas" width="24" height="24" style="border-style:none; vertical-align:middle; width:24px; height:24px">&nbsp;<a href="https://maps.google.com/?q={employee_id.company_id.street},&nbsp;{employee_id.company_id.street2},&nbsp;{employee_id.company_id.city},&nbsp;{employee_id.company_id.state_id.name},&nbsp;{employee_id.company_id.zip},&nbsp;{employee_id.company_id.country_id.name}" target="_blank" rel="noopener noreferrer" data-auth="NotApplicable" style="text-decoration:none; background-color:transparent; color:#556ee6" data-linkindex="2">{employee_id.company_id.street}</a></p></td></tr><tr><td><p style="margin:0px; font-size:13px; font-family:&quot;Lucida Grande&quot;,Helvetica,Verdana,Arial,sans-serif"><img data-imagetype="External" src="{url}/web/image/ir.attachment/{right_arrow_image}/datas" width="24" height="24" style="border-style:none; vertical-align:middle; width:24px; height:24px">&nbsp;{employee_id.company_id.street2},&nbsp;{employee_id.company_id.city},&nbsp;{employee_id.company_id.state_id.name},&nbsp;{employee_id.company_id.zip},&nbsp;{employee_id.company_id.country_id.name}</p></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></div>'
+            body_content = body_content + f'</br></br><div style="margin-bottom:-24px;"><table style="border-collapse:collapse"><tbody><tr><td><table style="border-collapse:collapse"><tbody><tr><td><table style="border-collapse:collapse"><tbody><tr><td><strong style="font-weight:bolder">{employee_id.name} |&nbsp;</strong>{employee_id.job_title}</td><td><a href="https://aspiresoftserv.com/" target="_blank" rel="noopener noreferrer" data-auth="NotApplicable" style="text-decoration:none; background-color:transparent; color:#556ee6" data-linkindex="0"><img data-imagetype="External" src="https://aspiresoftserv.com/_next/static/media/aspire-logo-color.7b236c07.svg" width="0" height="0" style="border-style:none; vertical-align:middle; width:auto; height:auto"></a></td></tr></tbody></table></td></tr></tbody></table></td></tr><tr><td><table style="border-collapse:collapse"><tbody><tr><td><table style="border-collapse:collapse"><tbody><tr><td><table style="border-collapse:collapse"><tbody><tr><td><p style="margin:0px; font-size:13px; font-family:&quot;Lucida Grande&quot;,Helvetica,Verdana,Arial,sans-serif"><img data-imagetype="External" src="{url}/web/image/ir.attachment/{phone_image}/datas" width="24" height="24" style="border-style:none; vertical-align:middle; width:24px; height:24px">&nbsp;{employee_id.work_phone}&nbsp;&nbsp;&nbsp;<img data-imagetype="External" src="{url}/web/image/ir.attachment/{website_image}/datas"" width="24" height="24" style="border-style:none; vertical-align:middle; width:24px; height:24px">&nbsp;<a href="{employee_id.company_id.website}" target="_blank" rel="noopener noreferrer" data-auth="NotApplicable" style="text-decoration:none; background-color:transparent; color:#556ee6" data-linkindex="1">{employee_id.company_id.website}</a></p></td></tr><tr><td><p style="margin:0px; font-size:13px; font-family:&quot;Lucida Grande&quot;,Helvetica,Verdana,Arial,sans-serif"><img data-imagetype="External" src="{url}/web/image/ir.attachment/{email_image}/datas" width="24" height="24" style="border-style:none; vertical-align:middle; width:24px; height:24px">&nbsp;{employee_id.work_email}</p></td></tr><tr><td><p style="margin:0px; font-size:13px; font-family:&quot;Lucida Grande&quot;,Helvetica,Verdana,Arial,sans-serif"><img data-imagetype="External" src="{url}/web/image/ir.attachment/{location_image}/datas" width="24" height="24" style="border-style:none; vertical-align:middle; width:24px; height:24px">&nbsp;<a href="https://maps.google.com/?q={employee_id.company_id.street},&nbsp;{employee_id.company_id.street2},&nbsp;{employee_id.company_id.city},&nbsp;{employee_id.company_id.state_id.name},&nbsp;{employee_id.company_id.zip},&nbsp;{employee_id.company_id.country_id.name}" target="_blank" rel="noopener noreferrer" data-auth="NotApplicable" style="text-decoration:none; background-color:transparent; color:#556ee6" data-linkindex="2">{employee_id.company_id.street}</a></p></td></tr><tr><td><p style="margin:0px; font-size:13px; font-family:&quot;Lucida Grande&quot;,Helvetica,Verdana,Arial,sans-serif"><img data-imagetype="External" src="{url}/web/image/ir.attachment/{right_arrow_image}/datas" width="24" height="24" style="border-style:none; vertical-align:middle; width:24px; height:24px">&nbsp;{employee_id.company_id.street2},&nbsp;{employee_id.company_id.city},&nbsp;{employee_id.company_id.state_id.name},&nbsp;{employee_id.company_id.zip},&nbsp;{employee_id.company_id.country_id.name}</p></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></div>'
 
         body_content = html.unescape(body_content)
         try:
@@ -61,15 +61,11 @@ class CrmFollowup(models.Model):
                 'author_id': self.env.user.id,
                 'email_from': crm_obj.user_id.login,
                 'email_to': crm_obj.partner_id.email,
-                # 'email_from': '"Purav Gandhi" <pgandhi@aspiresoftserv.com>',
-                # 'reply_to': 'aspiresolutionsodoo@gmail.com',
             }
             ctx = dict(self.env.context)
             ctx.update({'from_lead_followup': True, 'mail_notify_force_send': True})
             message_id = crm_obj.with_context(ctx).message_post(**post_params)
-            _logger.info('Mail Send successfully to Customer :  %s', crm_obj.partner_id.name)
         except Exception:
-            _logger.error('Something is wrong')
             message_id = False
 
         return [message_id, b_content]

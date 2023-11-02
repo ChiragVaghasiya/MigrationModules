@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
     <record model="ir.ui.view" id="view_task_enhancement">
@@ -7,31 +7,11 @@
         <field name="inherit_id" ref="crm.crm_lead_view_form"/>
         <field name="arch" type="xml">
 
-            <xpath expr="//field[@name='email_cc']" position="after">
-                <field name="linked_in_profile" string="LinkedIn Profile"/>
-                <field name="company_linkedin_url" string="Company LinkedIn URL"/>
-            </xpath>
-
             <xpath expr="//group[@name='lead_priority']" position="inside">
                 <field name="followup_id"/>
                 <field name="followup_start_date"/>
                 <field name="last_followup_send_date" readonly="1"/>
                 <field name="followup_replay_date" readonly="1"/>
-            </xpath>
-
-            <xpath expr="//field[@name='source_id']" position="after">
-                <field name="source_by"/>
-            </xpath>
-            <xpath expr="//field[@name='team_id']" position="after">
-                <field name="direction"/>
-                <field name="industry_id"/>
-                <field name="revenue"/>
-            </xpath>
-            <xpath expr="//field[@name='country_id']" position="replace">
-                <div class="o_row">
-                    <field name="country_id" placeholder="Country" options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
-                    <field name="zone" placeholder="Zone" options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
-                </div>
             </xpath>
 
             <xpath expr="//page[@name='internal_notes']" position="after">

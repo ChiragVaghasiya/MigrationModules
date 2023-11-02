@@ -1,7 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_block_emails,access_block_emails,model_block_emails,base.group_user,1,1,1,1
 access_crm_followup,access.crm.followup,model_crm_followup,,1,1,1,1
 access_crm_followup_lines,access.crm.followup.lines,model_crm_followup_lines,,1,1,1,1
 access_followup_history,access.followup.history,model_followup_history,,1,1,1,1
-access_crm_industry,access.crm.industry,model_crm_industry,,1,1,1,1
-access_send_email_edit,access.send.email.edit,model_send_email_edit,,1,1,1,1
