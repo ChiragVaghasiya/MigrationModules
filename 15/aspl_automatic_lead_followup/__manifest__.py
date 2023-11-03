@@ -8,11 +8,12 @@
 {
     "name": "Automatic Lead Followup",
     "category": "CRM",
-    "summary": "",
+    "summary": "Odoo automates lead nurturing for improved sales efficiency.",
     "version": "15.0.0.1.0",
     "price": 0.00,
     "license": "AGPL-3",
     'description': """
+        This module in Odoo automates the process of following up with leads and potential customers. It allows you to set predefined rules and schedules for follow-up actions, ensuring that leads are nurtured and converted into customers more efficiently. This module helps streamline sales processes and improve lead conversion rates.
     """,
     "author": "Aspire Softserv Pvt. Ltd",
     "website": "https://aspiresoftserv.com",

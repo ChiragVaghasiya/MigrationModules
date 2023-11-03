@@ -16,35 +16,35 @@
             <field name="name">email.jpeg</field>
             <field name="type">binary</field>
             <field name="public">true</field>
-            <field name="datas" type="base64" file="aspl_automatic_lead_followup/static/src/email.jpeg"/>
+            <field name="datas" type="base64" file="aspl_automatic_lead_followup/static/description/images/email.jpeg"/>
         </record>
 
         <record id="location_image_record" model="ir.attachment">
             <field name="name">location.jpeg</field>
             <field name="type">binary</field>
             <field name="public">true</field>
-            <field name="datas" type="base64" file="aspl_automatic_lead_followup/static/src/location.jpeg"/>
+            <field name="datas" type="base64" file="aspl_automatic_lead_followup/static/description/images/location.jpeg"/>
         </record>
 
         <record id="phone_image_record" model="ir.attachment">
             <field name="name">phone.jpeg</field>
             <field name="type">binary</field>
             <field name="public">true</field>
-            <field name="datas" type="base64" file="aspl_automatic_lead_followup/static/src/phone.jpeg"/>
+            <field name="datas" type="base64" file="aspl_automatic_lead_followup/static/description/images/phone.jpeg"/>
         </record>
 
         <record id="right_arrow_image_record" model="ir.attachment">
             <field name="name">right_arrow.jpeg</field>
             <field name="type">binary</field>
             <field name="public">true</field>
-            <field name="datas" type="base64" file="aspl_automatic_lead_followup/static/src/right_arrow.jpeg"/>
+            <field name="datas" type="base64" file="aspl_automatic_lead_followup/static/description/images/right_arrow.jpeg"/>
         </record>
 
         <record id="website_image_record" model="ir.attachment">
             <field name="name">website.jpeg</field>
             <field name="type">binary</field>
             <field name="public">true</field>
-            <field name="datas" type="base64" file="aspl_automatic_lead_followup/static/src/website.jpeg"/>
+            <field name="datas" type="base64" file="aspl_automatic_lead_followup/static/description/images/website.jpeg"/>
         </record>
 
     </data>

@@ -72,10 +72,10 @@ class CrmFollowup(models.Model):
 
     def followup_mail_sender(self):
         crm_lead_ids = self.env['crm.lead'].sudo().search([
-            ('followup_id' , '!=' , False) ,
-            ('followup_start_date' , '!=' , False),
-            ('user_id' , '!=' , False),
-            ('followup_replay_date' , '=' , False),
+            ('followup_id', '!=', False),
+            ('followup_start_date', '!=', False),
+            ('user_id', '!=', False),
+            ('followup_replay_date', '=', False),
         ])
 
         for crm_obj in crm_lead_ids:
@@ -108,7 +108,7 @@ class CrmFollowupLines(models.Model):
     crm_followup_template_id = fields.Many2one('crm.followup', string='Crm Followup Template')
     frequency_days = fields.Integer(string="Frequency Days")
     add_context = fields.Html(string="Add Context",
-          default = '''
+          default='''
                         # Available variables : </br>
                            ******************* </br>
                         # {{name}} : crm.lead Client Name</br>
