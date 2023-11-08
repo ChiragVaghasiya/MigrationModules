@@ -23,7 +23,8 @@
             <field name="name">location.jpeg</field>
             <field name="type">binary</field>
             <field name="public">true</field>
-            <field name="datas" type="base64" file="aspl_automatic_lead_followup/static/description/images/location.jpeg"/>
+            <field name="datas" type="base64"
+                   file="aspl_automatic_lead_followup/static/description/images/location.jpeg"/>
         </record>
 
         <record id="phone_image_record" model="ir.attachment">
@@ -37,14 +38,16 @@
             <field name="name">right_arrow.jpeg</field>
             <field name="type">binary</field>
             <field name="public">true</field>
-            <field name="datas" type="base64" file="aspl_automatic_lead_followup/static/description/images/right_arrow.jpeg"/>
+            <field name="datas" type="base64"
+                   file="aspl_automatic_lead_followup/static/description/images/right_arrow.jpeg"/>
         </record>
 
         <record id="website_image_record" model="ir.attachment">
             <field name="name">website.jpeg</field>
             <field name="type">binary</field>
             <field name="public">true</field>
-            <field name="datas" type="base64" file="aspl_automatic_lead_followup/static/description/images/website.jpeg"/>
+            <field name="datas" type="base64"
+                   file="aspl_automatic_lead_followup/static/description/images/website.jpeg"/>
         </record>
 
     </data>

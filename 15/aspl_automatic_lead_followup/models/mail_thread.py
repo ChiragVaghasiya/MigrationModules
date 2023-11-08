@@ -3,9 +3,10 @@
 import ast
 import re
 import threading
-from odoo import _, api, fields, models, tools, registry, SUPERUSER_ID, Command
-from email.message import EmailMessage
 from datetime import date
+from email.message import EmailMessage
+
+from odoo import api, models, tools, registry, SUPERUSER_ID, Command
 from odoo.tools.misc import clean_context, split_every
 
 
@@ -64,7 +65,8 @@ class MailThread(models.AbstractModel):
             for ref in tools.mail_header_msgid_re.findall(thread_references)
             if 'reply_to' not in ref
         ]
-        mail_messages = self.env['mail.message'].sudo().search([('message_id', 'in', msg_references)], limit=1, order='id desc, message_id')
+        mail_messages = self.env['mail.message'].sudo().search([('message_id', 'in', msg_references)], limit=1,
+                                                               order='id desc, message_id')
         is_a_reply = bool(mail_messages)
         reply_model, reply_thread_id = mail_messages.model, mail_messages.res_id
 
@@ -112,7 +114,8 @@ class MailThread(models.AbstractModel):
             ])
             if other_model_aliases:
                 is_a_reply = False
-                rcpt_tos_valid_localparts = [to for to in rcpt_tos_valid_localparts if to in other_model_aliases.mapped('alias_name')]
+                rcpt_tos_valid_localparts = [to for to in rcpt_tos_valid_localparts if
+                                             to in other_model_aliases.mapped('alias_name')]
 
         if is_a_reply:
             reply_model_id = self.env['ir.model']._get_id(reply_model)
@@ -143,11 +146,13 @@ class MailThread(models.AbstractModel):
             message_dict.pop('parent_id', None)
 
             # check it does not directly contact catchall
-            if catchall_alias and email_to_localparts and all(email_localpart == catchall_alias for email_localpart in email_to_localparts):
+            if catchall_alias and email_to_localparts and all(
+                    email_localpart == catchall_alias for email_localpart in email_to_localparts):
                 body = self.env.ref('mail.mail_bounce_catchall')._render({
                     'message': message,
                 }, engine='ir.qweb')
-                self._routing_create_bounce_email(email_from, body, message, references=message_id, reply_to=self.env.company.email)
+                self._routing_create_bounce_email(email_from, body, message, references=message_id,
+                                                  reply_to=self.env.company.email)
                 return []
 
             dest_aliases = self.env['mail.alias'].search([('alias_name', 'in', rcpt_tos_valid_localparts)])
@@ -155,7 +160,8 @@ class MailThread(models.AbstractModel):
                 routes = []
                 for alias in dest_aliases:
                     user_id = self._mail_find_user_for_gateway(email_from, alias=alias).id or self._uid
-                    route = (alias.sudo().alias_model_id.model, alias.alias_force_thread_id, ast.literal_eval(alias.alias_defaults), user_id, alias)
+                    route = (alias.sudo().alias_model_id.model, alias.alias_force_thread_id,
+                             ast.literal_eval(alias.alias_defaults), user_id, alias)
                     route = self._routing_check_route(message, message_dict, route, raise_exception=True)
                     if route:
                         routes.append(route)
@@ -206,23 +212,27 @@ class MailThread(models.AbstractModel):
             return True
 
         model = msg_vals.get('model') if msg_vals else message.model
-        model_name = model_description or (self._fallback_lang().env['ir.model']._get(model).display_name if model else False) # one query for display name
+        model_name = model_description or (self._fallback_lang().env['ir.model']._get(
+            model).display_name if model else False)  # one query for display name
         recipients_groups_data = self._notify_classify_recipients(partners_data, model_name, msg_vals=msg_vals)
 
         if not recipients_groups_data:
             return True
         force_send = self.env.context.get('mail_notify_force_send', force_send)
 
-        template_values = self._notify_prepare_template_context(message, msg_vals, model_description=model_description) # 10 queries
+        template_values = self._notify_prepare_template_context(message, msg_vals,
+                                                                model_description=model_description)  # 10 queries
 
         email_layout_xmlid = msg_vals.get('email_layout_xmlid') if msg_vals else message.email_layout_xmlid
         template_xmlid = email_layout_xmlid if email_layout_xmlid else 'mail.message_notification_email'
         try:
-            base_template = self.env.ref(template_xmlid, raise_if_not_found=True).with_context(lang=template_values['lang']) # 1 query
+            base_template = self.env.ref(template_xmlid, raise_if_not_found=True).with_context(
+                lang=template_values['lang'])  # 1 query
         except ValueError:
             base_template = False
 
-        mail_subject = message.subject or (message.record_name and 'Re: %s' % message.record_name) # in cache, no queries
+        mail_subject = message.subject or (
+                message.record_name and 'Re: %s' % message.record_name)  # in cache, no queries
         # Replace new lines by spaces to conform to email headers requirements
         mail_subject = ' '.join((mail_subject or '').splitlines())
         # compute references: set references to the parent and add current message just to
@@ -236,7 +246,8 @@ class MailThread(models.AbstractModel):
         # prepare notification mail values
         base_mail_values = {
             'mail_message_id': message.id,
-            'mail_server_id': message.mail_server_id.id, # 2 query, check acces + read, may be useless, Falsy, when will it be used?
+            'mail_server_id': message.mail_server_id.id,
+            # 2 query, check acces + read, may be useless, Falsy, when will it be used?
             'auto_delete': mail_auto_delete,
             # due to ir.rule, user have no right to access parent message if message is not published
             'references': references,
@@ -291,7 +302,8 @@ class MailThread(models.AbstractModel):
                 }
                 if email_to:
                     create_values['email_to'] = email_to
-                create_values.update(base_mail_values)  # mail_message_id, mail_server_id, auto_delete, references, headers
+                create_values.update(
+                    base_mail_values)  # mail_message_id, mail_server_id, auto_delete, references, headers
                 email = SafeMail.create(create_values)
 
                 if email and recipient_ids:
@@ -303,7 +315,8 @@ class MailThread(models.AbstractModel):
                             ('res_partner_id', 'in', tocreate_recipient_ids)
                         ])
                         if existing_notifications:
-                            tocreate_recipient_ids = [rid for rid in recipient_ids if rid not in existing_notifications.mapped('res_partner_id.id')]
+                            tocreate_recipient_ids = [rid for rid in recipient_ids if
+                                                      rid not in existing_notifications.mapped('res_partner_id.id')]
                             existing_notifications.write({
                                 'notification_status': 'ready',
                                 'mail_mail_id': email.id,

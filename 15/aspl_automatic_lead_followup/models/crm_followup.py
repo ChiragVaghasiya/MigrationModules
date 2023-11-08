@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 import html
-from odoo import models, fields, api, _
 from datetime import date, datetime
+
 from dateutil.relativedelta import relativedelta
+from odoo import models, fields
 
 
 class CrmFollowup(models.Model):
@@ -39,7 +40,6 @@ class CrmFollowup(models.Model):
         b_content = body_content
         employee_id = self.env['hr.employee'].search([('user_id', '=', crm_obj.user_id.id)], limit=1)
         if employee_id:
-
             url = self.env['ir.config_parameter'].get_param('web.base.url')
             email_image = self.env.ref('aspl_automatic_lead_followup.email_image_record').sudo().id
             location_image = self.env.ref('aspl_automatic_lead_followup.location_image_record').sudo().id
@@ -81,7 +81,7 @@ class CrmFollowup(models.Model):
         for crm_obj in crm_lead_ids:
             if crm_obj.followup_start_date <= date.today():
                 for line_obj in crm_obj.followup_id.crm_followup_line_ids:
-                    if (( crm_obj.followup_start_date + relativedelta( days = line_obj.frequency_days ) ) == date.today()):
+                    if ((crm_obj.followup_start_date + relativedelta(days=line_obj.frequency_days)) == date.today()):
                         mail_sender = CrmFollowup.mail_sender(self, crm_obj, line_obj)
                         message_id = mail_sender[0]
                         if message_id != False:
@@ -97,24 +97,3 @@ class CrmFollowup(models.Model):
                                 'content': mail_sender[1],
                             })
                             break
-
-
-class CrmFollowupLines(models.Model):
-    _name = "crm.followup.lines"
-    _description = "CrmFollowupLines"
-    _order = "frequency_days"
-
-    name = fields.Char(string="Name")
-    crm_followup_template_id = fields.Many2one('crm.followup', string='Crm Followup Template')
-    frequency_days = fields.Integer(string="Frequency Days")
-    add_context = fields.Html(string="Add Context",
-          default='''
-                        # Available variables : </br>
-                           ******************* </br>
-                        # {{name}} : crm.lead Client Name</br>
-                        # {{company}} : crm.lead Company Name </br>
-                        # {{website}} : crm.lead Website </br>
-                        
-                        </br></br>
-                        # Note: returned value have to be set in the variable From CRM Lead.
-                        ''')

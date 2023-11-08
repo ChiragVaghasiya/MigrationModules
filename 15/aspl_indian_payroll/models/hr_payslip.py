@@ -309,7 +309,6 @@ class HrPayslipRun(models.Model):
             for normal_work_days in data.worked_days_line_ids:
                 if normal_work_days.code == "LOP":
                     leave_lop = normal_work_days.number_of_days
-                    # print(leave_lop,"LOP leaves")
                 if normal_work_days.code == "SHORTFALL":
                     leave_sf = normal_work_days.number_of_days
                     leave_sf_hrs = normal_work_days.number_of_hours
