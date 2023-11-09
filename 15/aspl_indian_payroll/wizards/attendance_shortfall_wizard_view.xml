@@ -103,20 +103,21 @@
                     </group>
                     <group attrs="{'invisible': [('state', '!=', '1')]}" string="Not Approved Leaves">
                         <h5>To process payroll correctly, all leaves needs to be approved/rejected. Please make sure you
-                        have rejected the leaves. The payroll process will approve all pending leaves if All Leave Approve check box is checked. Click "Next"
-                        to proceed with approval.
+                            have rejected the leaves. The payroll process will approve all pending leaves if All Leave
+                            Approve check box is checked. Click "Next"
+                            to proceed with approval.
                         </h5>
                     </group>
                     <group attrs="{'invisible': [('state', '!=', '1')]}">
-                        <field name="approve_all_leave"/>    
+                        <field name="approve_all_leave"/>
                     </group>
                     <group attrs="{'invisible': [('state', '!=', '2')]}">
                         <h5>Attendance Shortfall list</h5>
                         <br/>
                         <!--                        <button name="check_attendance" string="Check" type="object"/>-->
-                    </group> 
+                    </group>
                     <group attrs="{'invisible': [('state', '!=', '2')]}">
-                        <field name="attendance_shortfall_ids" nolabel="1"> 
+                        <field name="attendance_shortfall_ids" nolabel="1">
                             <tree editable="bottom" edit="1">
                                 <field name="employee_id" readonly="1"/>
                                 <field name="working_hours" readonly="1"/>
@@ -126,7 +127,7 @@
                                 <field name="shortfall_days"/>
                             </tree>
                         </field>
-                    </group>   
+                    </group>
                     <group attrs="{'invisible': [('state', '!=', '3')]}" string="Contract Renewal">
                         <h5>Contracts for following employees/consultants have been created which is applicable to the
                             selected salary period. Make sure contract is updated.

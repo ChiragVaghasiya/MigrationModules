@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 import calendar
-import fiscalyear
-from odoo import models, api
 from datetime import datetime, date
+
+import fiscalyear
 from dateutil.relativedelta import relativedelta
+from odoo import models, api
 from odoo.http import request
 
 
@@ -83,7 +84,8 @@ class HrEmoloyee(models.Model):
                                         ytd_summary_it_statement_data.get(a).get(line.rule_id.name)[
                                             counter_month] = line.amount
                                 else:
-                                    ytd_summary_it_statement_data.get(a)[line.rule_id.name] = {counter_month: line.amount}
+                                    ytd_summary_it_statement_data.get(a)[line.rule_id.name] = {
+                                        counter_month: line.amount}
                             else:
                                 ytd_summary_it_statement_data[a] = {line.rule_id.name: {counter_month: line.amount}}
                 if (datetime.now().month == 12 or counter_month == 12):
@@ -140,8 +142,10 @@ class HrEmoloyee(models.Model):
                 ytd_summary_it_deduction_component_last_employer = {}
                 ytd_summary_it_deduction_component_last_employer['Total Income After Exemptions'] = it_declaration_info[
                     1].income_after_exemptions
-                ytd_summary_it_deduction_component_last_employer['Professional Tax'] = it_declaration_info[1].professional_tax
-                ytd_summary_it_deduction_component_last_employer['Provident Fund'] = it_declaration_info[1].provident_fund
+                ytd_summary_it_deduction_component_last_employer['Professional Tax'] = it_declaration_info[
+                    1].professional_tax
+                ytd_summary_it_deduction_component_last_employer['Provident Fund'] = it_declaration_info[
+                    1].provident_fund
                 ytd_summary_it_deduction_component_last_employer['Total Tax'] = it_declaration_info[
                     1].total_tax_previous_employer
 
@@ -176,9 +180,14 @@ class HrEmoloyee(models.Model):
                 standard_deduction = 50000
 
                 ytd_summary_it_deduction_components = {}
-                ytd_summary_it_deduction_components = {'HRA Exempted Amount': hra_exempted_amount, 'Professional Tax': pt, 'Standard Deduction': standard_deduction, '80c': it_components['80c'], '80ccd': it_components['80ccd'], '80d': it_components['80d'], '80other': it_components['80other']}
+                ytd_summary_it_deduction_components = {'HRA Exempted Amount': hra_exempted_amount,
+                                                       'Professional Tax': pt, 'Standard Deduction': standard_deduction,
+                                                       '80c': it_components['80c'], '80ccd': it_components['80ccd'],
+                                                       '80d': it_components['80d'], '80other': it_components['80other']}
 
-                ytd_summary_it_income_components = {'Other Income': it_components['other_income'], 'Income Lose House Property': it_components['income_lose_house_property']}
+                ytd_summary_it_income_components = {'Other Income': it_components['other_income'],
+                                                    'Income Lose House Property': it_components[
+                                                        'income_lose_house_property']}
 
                 # ===================================== OLD REGIME =====================================
                 for key, values in ytd_summary_it_deduction_components.items():
@@ -187,7 +196,9 @@ class HrEmoloyee(models.Model):
                     taxable_amount += values
                 taxable_amount += ytd_summary_it_deduction_component_last_employer['Total Income After Exemptions']
 
-                old_regime_tax = employee.old_regime_calculation(taxable_amount, ecess_prev_emp, surcharge_prev_emp, tax_prev_emp, gratuity_from_previous_system, total_paid_tax)
+                old_regime_tax = employee.old_regime_calculation(taxable_amount, ecess_prev_emp, surcharge_prev_emp,
+                                                                 tax_prev_emp, gratuity_from_previous_system,
+                                                                 total_paid_tax)
                 taxo_old_regime = old_regime_tax[1]
                 surchargeo_old_regime = old_regime_tax[3]
                 cesso_old_regime = old_regime_tax[2]
@@ -198,11 +209,14 @@ class HrEmoloyee(models.Model):
                 taxable_amount_new_regime = ytd_summary_it_statement_data['Income']['Total']['Total']
                 for key, values in ytd_summary_it_income_components.items():
                     taxable_amount_new_regime += values
-                taxable_amount_new_regime += ytd_summary_it_deduction_component_last_employer['Total Income After Exemptions']
+                taxable_amount_new_regime += ytd_summary_it_deduction_component_last_employer[
+                    'Total Income After Exemptions']
                 taxable_amount_new_regime -= standard_deduction
                 taxable_amount_new_regime -= pt
 
-                new_regime_tax = employee.new_regime_calculation(taxable_amount_new_regime, ecess_prev_emp, surcharge_prev_emp, tax_prev_emp, gratuity_from_previous_system, total_paid_tax)
+                new_regime_tax = employee.new_regime_calculation(taxable_amount_new_regime, ecess_prev_emp,
+                                                                 surcharge_prev_emp, tax_prev_emp,
+                                                                 gratuity_from_previous_system, total_paid_tax)
                 taxo_new_regime = new_regime_tax[1]
                 surchargen_new_regime = new_regime_tax[3]
                 cessn_new_regime = new_regime_tax[2]
@@ -213,14 +227,17 @@ class HrEmoloyee(models.Model):
                     taxable_amount = 0
                 if taxable_amount_new_regime < 0:
                     taxable_amount_new_regime = 0
-                tax_amount_old_regime_dict = {'Raw Tax': "{:.2f}".format(taxo_old_regime), 'Surcharge': "{:.2f}".format(surchargeo_old_regime),
+                tax_amount_old_regime_dict = {'Raw Tax': "{:.2f}".format(taxo_old_regime),
+                                              'Surcharge': "{:.2f}".format(surchargeo_old_regime),
                                               'Health & Edu.Cess': "{:.2f}".format(cesso_old_regime),
-                                              'Accumulated Gratuity(From previous system)': "{:.2f}".format(grayhr_old_regime),
+                                              'Accumulated Gratuity(From previous system)': "{:.2f}".format(
+                                                  grayhr_old_regime),
                                               'Total Tax Amount': "{:.2f}".format(tottaxo_old_regime)}
                 tax_amount_new_regime_dict = {'Raw Tax': "{:.2f}".format(taxo_new_regime),
                                               'Surcharge': "{:.2f}".format(surchargen_new_regime),
                                               'Health & Edu.Cess': "{:.2f}".format(cessn_new_regime),
-                                              'Accumulated Gratuity(From previous system)': "{:.2f}".format(grayhr_new_regime),
+                                              'Accumulated Gratuity(From previous system)': "{:.2f}".format(
+                                                  grayhr_new_regime),
                                               'Total Tax Amount': "{:.2f}".format(tottaxo_new_regime)}
 
                 data = {

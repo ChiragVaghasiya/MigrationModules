@@ -50,7 +50,8 @@
                         </group>
                         <group>
                             <field name="grand_total" string="Total"/>
-                            <field name="gratuity_from_previous_system" string="Accumulated Gratuity(From previous system)"/>
+                            <field name="gratuity_from_previous_system"
+                                   string="Accumulated Gratuity(From previous system)"/>
                         </group>
                     </group>
                     <notebook>

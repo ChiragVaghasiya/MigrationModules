@@ -2,12 +2,13 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 import base64
 import threading
+from datetime import date, datetime
+
+from dateutil.relativedelta import relativedelta
 from odoo import _, models, api, fields
 from odoo.exceptions import ValidationError
 from openpyxl import Workbook
 from openpyxl.styles import PatternFill
-from datetime import date, datetime
-from dateutil.relativedelta import relativedelta
 
 
 class HrPayslip(models.Model):
@@ -132,9 +133,10 @@ class HrPayslip(models.Model):
                 lop_to_add = False if worked_line_obj.code == 'LOP' else True
 
             if lop_to_add:
-                payslip_obj.write({'worked_days_line_ids': [(0, 0, {'name': 'Leaves without pay', 'sequence': 2, 'code':'LOP', 'number_of_days': 0,
-                               'number_of_hours': 0,
-                               'contract_id': payslip_obj.contract_id.id})]})
+                payslip_obj.write({'worked_days_line_ids': [
+                    (0, 0, {'name': 'Leaves without pay', 'sequence': 2, 'code': 'LOP', 'number_of_days': 0,
+                            'number_of_hours': 0,
+                            'contract_id': payslip_obj.contract_id.id})]})
         return payslip
 
     def compute_sheet(self):

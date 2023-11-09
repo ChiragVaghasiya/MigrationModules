@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
-import fiscalyear
-from odoo import models, fields, api
 from datetime import datetime, date
+
+import fiscalyear
 from dateutil.relativedelta import relativedelta
+from odoo import models, fields, api
 
 SEPARATION_MODE = [
     ('awol', 'ABSENT W/O LEAVE'),
@@ -256,7 +257,7 @@ class HrEmployee(models.Model):
         if worked_days.SHORTFALL:
             number_of_days += worked_days.SHORTFALL.number_of_days
         calculated_wage = ((contract.wage * (
-                    worked_days.WORK100.number_of_days / number_of_days)) * basicpercentagep) / 100
+                worked_days.WORK100.number_of_days / number_of_days)) * basicpercentagep) / 100
         if contract.pf:
             basic = min_basic if calculated_wage <= min_basic else calculated_wage
         else:
@@ -364,7 +365,7 @@ class HrEmployee(models.Model):
                 if esicappp == "Yes":
                     esic_perc_temp = (1 - esic_er_percentage) * esic_er_percentage
                     esic_er_temp = round((basicannualp + (
-                                ctcamountp - basicannualp - gratuityerannualp - pf_work_temp)) * esic_perc_temp)
+                            ctcamountp - basicannualp - gratuityerannualp - pf_work_temp)) * esic_perc_temp)
 
                     if esic_er_temp <= 0:
                         esic_er_temp = 0
@@ -532,7 +533,7 @@ class HrEmployee(models.Model):
                 if esicappp == "Yes":
                     esic_perc_temp = (1 - esic_er_percentage) * esic_er_percentage
                     esic_er_temp = round((basicannualp + (
-                                ctcamountp - basicannualp - gratuityerannualp - pf_work_temp)) * esic_perc_temp)
+                            ctcamountp - basicannualp - gratuityerannualp - pf_work_temp)) * esic_perc_temp)
 
                     if esic_er_temp <= 0:
                         esic_er_temp = 0
@@ -700,7 +701,7 @@ class HrEmployee(models.Model):
                 if esicappp == "Yes":
                     esic_perc_temp = (1 - esic_er_percentage) * esic_er_percentage
                     esic_er_temp = round((basicannualp + (
-                                ctcamountp - basicannualp - gratuityerannualp - pf_work_temp)) * esic_perc_temp)
+                            ctcamountp - basicannualp - gratuityerannualp - pf_work_temp)) * esic_perc_temp)
                     if esic_er_temp <= 0:
                         esic_er_temp = 0
                         esic_perc_temp = 0
@@ -886,7 +887,7 @@ class HrEmployee(models.Model):
                 if esicappp == "Yes":
                     esic_perc_temp = (1 - esic_er_percentage) * esic_er_percentage
                     esic_er_temp = round((basicannualp + (
-                                ctcamountp - basicannualp - gratuityerannualp - pf_work_temp)) * esic_perc_temp)
+                            ctcamountp - basicannualp - gratuityerannualp - pf_work_temp)) * esic_perc_temp)
                     if esic_er_temp <= 0:
                         esic_er_temp = 0
                         esic_perc_temp = 0
@@ -1033,7 +1034,7 @@ class HrEmployee(models.Model):
         if worked_days.SHORTFALL:
             number_of_days += worked_days.SHORTFALL.number_of_days
         return (contract.wage * (
-                    worked_days.WORK100.number_of_days / number_of_days)) - categories.ER_DED - categories.BASIC - categories.HRA
+                worked_days.WORK100.number_of_days / number_of_days)) - categories.ER_DED - categories.BASIC - categories.HRA
 
     def professional_tax_calculation(self):
         return self.company_id.professional_tax
@@ -1059,7 +1060,8 @@ class HrEmployee(models.Model):
     def net_salary_calculation(self, categories):
         return categories.BASIC + categories.HRA + categories.Other + categories.BONUS + categories.COMP - categories.EE_DED - categories.IT_DED
 
-    def old_regime_calculation(self, taxable_amount, ecess_prev_emp, surcharge_prev_emp, tax_prev_emp, gratuity_from_previous_system, total_paid_tax):
+    def old_regime_calculation(self, taxable_amount, ecess_prev_emp, surcharge_prev_emp, tax_prev_emp,
+                               gratuity_from_previous_system, total_paid_tax):
 
         if taxable_amount > 0 and taxable_amount <= 250000:
             taxo = 0
@@ -1116,7 +1118,8 @@ class HrEmployee(models.Model):
 
         return tottaxo, total_taxo, total_cesso, total_surchargeo, gratuity_from_previous_system
 
-    def new_regime_calculation(self, taxable_amount, ecess_prev_emp, surcharge_prev_emp, tax_prev_emp, gratuity_from_previous_system, total_paid_tax):
+    def new_regime_calculation(self, taxable_amount, ecess_prev_emp, surcharge_prev_emp, tax_prev_emp,
+                               gratuity_from_previous_system, total_paid_tax):
 
         if taxable_amount > 0 and taxable_amount <= 300000:
             taxo = 0
@@ -1224,12 +1227,14 @@ class HrEmployee(models.Model):
                 '80c') - declaration.get('80ccd') - declaration.get('80d') - declaration.get(
                 '80other') + declaration.get('income_lose_house_property') + declaration.get(
                 'other_income') + declaration.get('income_previous_employer') - pt)
-            old_regime_tax = self.old_regime_calculation(taxable_amount, ecess_prev_emp, surcharge_prev_emp, tax_prev_emp, gratuity_from_previous_system, total_paid_tax)
+            old_regime_tax = self.old_regime_calculation(taxable_amount, ecess_prev_emp, surcharge_prev_emp,
+                                                         tax_prev_emp, gratuity_from_previous_system, total_paid_tax)
             tottaxo = old_regime_tax[0]
         else:
             taxable_amount = self.cummulative_details(
                 payslip) + categories.BASIC + categories.HRA + categories.Other + categories.BONUS + categories.COMP - std_dedc - pt
-            old_regime_tax = self.new_regime_calculation(taxable_amount, ecess_prev_emp, surcharge_prev_emp, tax_prev_emp, gratuity_from_previous_system, total_paid_tax)
+            old_regime_tax = self.new_regime_calculation(taxable_amount, ecess_prev_emp, surcharge_prev_emp,
+                                                         tax_prev_emp, gratuity_from_previous_system, total_paid_tax)
             tottaxo = old_regime_tax[0]
 
         return round(tottaxo / remaining_months)
