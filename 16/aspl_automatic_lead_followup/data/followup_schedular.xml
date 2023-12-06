@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="ir_cron_followp_cron" model="ir.cron">
+            <field name="name">FollowUp Mail Sender</field>
+            <field name="model_id" ref="model_crm_followup"/>
+            <field name="state">code</field>
+            <field name="code">model.followup_mail_sender()</field>
+            <field name='interval_number'>1</field>
+            <field name='interval_type'>days</field>
+            <field name="numbercall">-1</field>
+        </record>
+
+        <record id="email_image_record" model="ir.attachment">
+            <field name="name">email.jpeg</field>
+            <field name="type">binary</field>
+            <field name="public">true</field>
+            <field name="datas" type="base64" file="aspl_automatic_lead_followup/static/description/images/email.jpeg"/>
+        </record>
+
+        <record id="location_image_record" model="ir.attachment">
+            <field name="name">location.jpeg</field>
+            <field name="type">binary</field>
+            <field name="public">true</field>
+            <field name="datas" type="base64"
+                   file="aspl_automatic_lead_followup/static/description/images/location.jpeg"/>
+        </record>
+
+        <record id="phone_image_record" model="ir.attachment">
+            <field name="name">phone.jpeg</field>
+            <field name="type">binary</field>
+            <field name="public">true</field>
+            <field name="datas" type="base64" file="aspl_automatic_lead_followup/static/description/images/phone.jpeg"/>
+        </record>
+
+        <record id="right_arrow_image_record" model="ir.attachment">
+            <field name="name">right_arrow.jpeg</field>
+            <field name="type">binary</field>
+            <field name="public">true</field>
+            <field name="datas" type="base64"
+                   file="aspl_automatic_lead_followup/static/description/images/right_arrow.jpeg"/>
+        </record>
+
+        <record id="website_image_record" model="ir.attachment">
+            <field name="name">website.jpeg</field>
+            <field name="type">binary</field>
+            <field name="public">true</field>
+            <field name="datas" type="base64"
+                   file="aspl_automatic_lead_followup/static/description/images/website.jpeg"/>
+        </record>
+
+    </data>
+</odoo>

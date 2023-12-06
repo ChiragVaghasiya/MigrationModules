@@ -17,7 +17,6 @@
     "author": "Aspire Softserv Pvt. Ltd",
     "website": "https://aspiresoftserv.com",
     "depends": [
-        'base',
         'hr',
         'hr_contract',
         'hr_holidays',
@@ -59,7 +58,6 @@
             'aspl_indian_payroll/static/src/js/it_statement.js',
         ],
         'web.assets_qweb': [
-
             'aspl_indian_payroll/static/src/xml/it_statement.xml',
         ],
     },
@@ -68,4 +66,5 @@
     'pre_init_hook': '_pre_init_update_rule',
     "maintainer": "Aspire Softserv Pvt. Ltd",
     "support": "odoo@aspiresoftserv.com",
+    "images": ['static/description/banner.gif'],
 }

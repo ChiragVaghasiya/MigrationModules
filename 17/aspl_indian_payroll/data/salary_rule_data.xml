@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!--      *** Salary Rules Category ***-->
+        <record id="categ_er_ded" model="hr.salary.rule.category">
+            <field name="name">ER Deduction</field>
+            <field name="code">ER_DED</field>
+            <field name="parent_id"></field>
+        </record>
+
+        <record id="categ_gratutity" model="hr.salary.rule.category">
+            <field name="name">Gratuity</field>
+            <field name="code">GRATUITY</field>
+            <field name="parent_id" ref="aspl_indian_payroll.categ_er_ded"/>
+        </record>
+
+        <record id="categ_esic" model="hr.salary.rule.category">
+            <field name="name">ESIC</field>
+            <field name="code">ESIC</field>
+            <field name="parent_id" ref="aspl_indian_payroll.categ_er_ded"/>
+        </record>
+
+        <record id="categ_ee_ded" model="hr.salary.rule.category">
+            <field name="name">EE_Deduction</field>
+            <field name="code">EE_DED</field>
+            <field name="parent_id"></field>
+        </record>
+
+        <record id="categ_ctc" model="hr.salary.rule.category">
+            <field name="name">Monthly CTC</field>
+            <field name="code">CTC</field>
+            <field name="parent_id"></field>
+        </record>
+
+        <record id="categ_it" model="hr.salary.rule.category">
+            <field name="name">IT_Deduction</field>
+            <field name="code">IT_DED</field>
+            <field name="parent_id"></field>
+        </record>
+
+        <record id="categ_bonus" model="hr.salary.rule.category">
+            <field name="name">Bonus</field>
+            <field name="code">BONUS</field>
+            <field name="parent_id"></field>
+        </record>
+
+        <record id="categ_fee" model="hr.salary.rule.category">
+            <field name="name">Fee</field>
+            <field name="code">FEE</field>
+            <field name="parent_id"></field>
+        </record>
+
+        <record id="categ_tds" model="hr.salary.rule.category">
+            <field name="name">TDS</field>
+            <field name="code">TDS</field>
+            <field name="parent_id"></field>
+        </record>
+
+        <record id="categ_total_gratutity" model="hr.salary.rule.category">
+            <field name="name">Total Gratuity</field>
+            <field name="code">TOTALGRATUITY</field>
+            <field name="parent_id"></field>
+        </record>
+
+        <record id="categ_compensation" model="hr.salary.rule.category">
+            <field name="name">Compensation</field>
+            <field name="code">COMP</field>
+            <field name="parent_id"></field>
+        </record>
+
+
+        <!--   *** Salary Rules ***-->
+        <record id="hr_payroll_community.hr_rule_basic" model="hr.salary.rule">
+            <field name="name">Basic Salary</field>
+            <field name="category_id" ref="hr_payroll_community.BASIC"/>
+            <field name="code">BASIC</field>
+            <field name="sequence" eval="1"/>
+            <field name="appear_on_contract">true</field>
+            <field name="appears_on_payslip">true</field>
+            <field name="is_deduction">false</field>
+            <field name="is_tax">false</field>
+            <field name="taxable">true</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = employee.basic_salary_calculation(contract,worked_days)</field>
+        </record>
+
+        <record id="hr_rule_gratuity" model="hr.salary.rule">
+            <field name="name">Gratuity</field>
+            <field name="category_id" ref="aspl_indian_payroll.categ_gratutity"/>
+            <field name="code">GRATUITY</field>
+            <field name="sequence" eval="2"/>
+            <field name="appear_on_contract">true</field>
+            <field name="appears_on_payslip">true</field>
+            <field name="is_deduction">true</field>
+            <field name="is_tax">false</field>
+            <field name="taxable">false</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = employee.gratuity_calculation(contract,categories)</field>
+        </record>
+
+        <record id="hr_rule_esic_er" model="hr.salary.rule">
+            <field name="name">ESIC (Employer Contribution)</field>
+            <field name="category_id" ref="aspl_indian_payroll.categ_er_ded"/>
+            <field name="code">ESIC_ER</field>
+            <field name="sequence" eval="3"/>
+            <field name="appear_on_contract">true</field>
+            <field name="appears_on_payslip">false</field>
+            <field name="is_deduction">false</field>
+            <field name="is_tax">false</field>
+            <field name="taxable">false</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = employee.esic_er_calculation(payslip,contract,categories)
+            </field>
+        </record>
+
+        <record id="hr_rule_esic_ee" model="hr.salary.rule">
+            <field name="name">ESIC</field>
+            <field name="category_id" ref="aspl_indian_payroll.categ_ee_ded"/>
+            <field name="code">ESIC_EE</field>
+            <field name="sequence" eval="4"/>
+            <field name="appear_on_contract">true</field>
+            <field name="appears_on_payslip">true</field>
+            <field name="is_deduction">true</field>
+            <field name="is_tax">false</field>
+            <field name="taxable">false</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = employee.esic_ee_calculation(contract,categories)</field>
+        </record>
+
+        <record id="hr_rule_pf_er" model="hr.salary.rule">
+            <field name="name">Provident Fund (Employer Contribution)</field>
+            <field name="category_id" ref="aspl_indian_payroll.categ_er_ded"/>
+            <field name="code">PF_ER</field>
+            <field name="sequence" eval="5"/>
+            <field name="appear_on_contract">true</field>
+            <field name="appears_on_payslip">false</field>
+            <field name="is_deduction">false</field>
+            <field name="is_tax">false</field>
+            <field name="taxable">false</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = employee.provident_fund_calculation(contract,categories)
+            </field>
+        </record>
+
+        <record id="hr_rule_pf_ee" model="hr.salary.rule">
+            <field name="name">Provident Fund</field>
+            <field name="category_id" ref="aspl_indian_payroll.categ_ee_ded"/>
+            <field name="code">PF_EE</field>
+            <field name="sequence" eval="7"/>
+            <field name="appear_on_contract">true</field>
+            <field name="appears_on_payslip">true</field>
+            <field name="is_deduction">true</field>
+            <field name="is_tax">false</field>
+            <field name="taxable">false</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = employee.provident_fund_ee_calculation(contract,categories)
+            </field>
+        </record>
+
+        <record id="hr_payroll_community.hr_salary_rule_house_rent_allowance1" model="hr.salary.rule">
+            <field name="name">House Rent Allowance</field>
+            <field name="category_id" ref="hr_payroll_community.HRA"/>
+            <field name="code">HRA</field>
+            <field name="sequence" eval="8"/>
+            <field name="appear_on_contract">true</field>
+            <field name="appears_on_payslip">true</field>
+            <field name="is_deduction">false</field>
+            <field name="is_tax">false</field>
+            <field name="taxable">true</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = employee.house_rent_allowance(contract,categories)</field>
+            <field name="register_id"></field>
+        </record>
+
+        <record id="hr_payroll_community.hr_rule_other" model="hr.salary.rule">
+            <field name="name">Other Allowance</field>
+            <field name="category_id" ref="hr_payroll_community.Other"/>
+            <field name="code">Other</field>
+            <field name="sequence" eval="9"/>
+            <field name="appear_on_contract">true</field>
+            <field name="appears_on_payslip">true</field>
+            <field name="is_deduction">false</field>
+            <field name="is_tax">false</field>
+            <field name="taxable">true</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = employee.other_allowance_calculation(contract,worked_days,categories)</field>
+        </record>
+
+        <record id="hr_rule_bonus" model="hr.salary.rule">
+            <field name="name">Bonus</field>
+            <field name="category_id" ref="aspl_indian_payroll.categ_bonus"/>
+            <field name="code">BONUS</field>
+            <field name="sequence" eval="10"/>
+            <field name="appear_on_contract">true</field>
+            <field name="appears_on_payslip">true</field>
+            <field name="is_deduction">false</field>
+            <field name="is_tax">false</field>
+            <field name="taxable">true</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = employee.get_payable_bonus(payslip)</field>
+        </record>
+
+        <record id="hr_payroll_community.hr_salary_rule_profession_altax1" model="hr.salary.rule">
+            <field name="name">Professional Tax</field>
+            <field name="category_id" ref="aspl_indian_payroll.categ_ee_ded"/>
+            <field name="code">PT</field>
+            <field name="sequence" eval="11"/>
+            <field name="appear_on_contract">true</field>
+            <field name="appears_on_payslip">true</field>
+            <field name="is_deduction">false</field>
+            <field name="is_tax">false</field>
+            <field name="taxable">false</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = employee.professional_tax_calculation()</field>
+            <field name="register_id"></field>
+        </record>
+
+        <record id="hr_rule_comp" model="hr.salary.rule">
+            <field name="name">Compensation</field>
+            <field name="category_id" ref="aspl_indian_payroll.categ_compensation"/>
+            <field name="code">COMP</field>
+            <field name="sequence" eval="12"/>
+            <field name="appear_on_contract">true</field>
+            <field name="appears_on_payslip">true</field>
+            <field name="is_deduction">false</field>
+            <field name="is_tax">false</field>
+            <field name="taxable">true</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = employee.get_payable_compensation(payslip)</field>
+        </record>
+
+        <record id="hr_rule_it" model="hr.salary.rule">
+            <field name="name">IT</field>
+            <field name="category_id" ref="aspl_indian_payroll.categ_it"/>
+            <field name="code">IT</field>
+            <field name="sequence" eval="13"/>
+            <field name="appear_on_contract">true</field>
+            <field name="appears_on_payslip">true</field>
+            <field name="is_deduction">false</field>
+            <field name="is_tax">true</field>
+            <field name="taxable">false</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = employee.it_calculation(categories,payslip)</field>
+        </record>
+
+        <record id="hr_rule_total_gratuity" model="hr.salary.rule">
+            <field name="name">Total Gratuity</field>
+            <field name="category_id" ref="aspl_indian_payroll.categ_total_gratutity"/>
+            <field name="code">TOTALGRATUITY</field>
+            <field name="sequence" eval="14"/>
+            <field name="appear_on_contract">false</field>
+            <field name="appears_on_payslip">true</field>
+            <field name="is_deduction">false</field>
+            <field name="is_tax">false</field>
+            <field name="taxable">false</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = employee.total_gratuity_calculation(payslip, contract,
+                categories)
+            </field>
+        </record>
+
+        <record id="hr_rule_fee" model="hr.salary.rule">
+            <field name="name">Consultancy Fee</field>
+            <field name="category_id" ref="aspl_indian_payroll.categ_fee"/>
+            <field name="code">FEE</field>
+            <field name="sequence" eval="21"/>
+            <field name="appear_on_contract">true</field>
+            <field name="appears_on_payslip">true</field>
+            <field name="is_deduction">false</field>
+            <field name="is_tax">false</field>
+            <field name="taxable">true</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result=employee.fee_calculation(contract,categories)</field>
+        </record>
+
+        <record id="hr_rule_tds" model="hr.salary.rule">
+            <field name="name">TDS</field>
+            <field name="category_id" ref="aspl_indian_payroll.categ_tds"/>
+            <field name="code">TDS</field>
+            <field name="sequence" eval="22"/>
+            <field name="appear_on_contract">true</field>
+            <field name="appears_on_payslip">true</field>
+            <field name="is_deduction">false</field>
+            <field name="is_tax">true</field>
+            <field name="taxable">false</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result =employee.tds_calculation(categories)</field>
+        </record>
+
+        <record id="hr_rule_ncc" model="hr.salary.rule">
+            <field name="name">Net Consultancy Charges</field>
+            <field name="category_id" ref="hr_payroll_community.NET"/>
+            <field name="code">NCC</field>
+            <field name="sequence" eval="23"/>
+            <field name="appear_on_contract">true</field>
+            <field name="appears_on_payslip">true</field>
+            <field name="is_deduction">false</field>
+            <field name="is_tax">false</field>
+            <field name="taxable">false</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = employee.net_consultancy_charges(categories)</field>
+        </record>
+
+        <record id="hr_payroll_community.hr_rule_taxable" model="hr.salary.rule">
+            <field name="name">Gross</field>
+            <field name="category_id" ref="hr_payroll_community.GROSS"/>
+            <field name="code">GROSS</field>
+            <field name="sequence" eval="100"/>
+            <field name="appear_on_contract">true</field>
+            <field name="appears_on_payslip">true</field>
+            <field name="is_deduction">false</field>
+            <field name="is_tax">false</field>
+            <field name="taxable">false</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = employee.gross_amount_calculation(categories)</field>
+        </record>
+
+        <record id="hr_rule_ctc" model="hr.salary.rule">
+            <field name="name">Monthly CTC</field>
+            <field name="category_id" ref="aspl_indian_payroll.categ_ctc"/>
+            <field name="code">CTC</field>
+            <field name="sequence" eval="110"/>
+            <field name="appear_on_contract">true</field>
+            <field name="appears_on_payslip">false</field>
+            <field name="is_deduction">false</field>
+            <field name="is_tax">false</field>
+            <field name="taxable">false</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = employee.monthly_CTC_calculation(categories)</field>
+        </record>
+
+        <record id="hr_rule_total_ded" model="hr.salary.rule">
+            <field name="name">Total Deduction</field>
+            <field name="category_id" ref="aspl_indian_payroll.categ_er_ded"/>
+            <field name="code">TOTAL_DED</field>
+            <field name="sequence" eval="200"/>
+            <field name="appear_on_contract">true</field>
+            <field name="appears_on_payslip">true</field>
+            <field name="is_deduction">false</field>
+            <field name="is_tax">false</field>
+            <field name="taxable">false</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result= employee.total_deduction_calculation(categories)</field>
+        </record>
+
+        <record id="hr_payroll_community.hr_rule_net" model="hr.salary.rule">
+            <field name="name">Net Salary</field>
+            <field name="category_id" ref="hr_payroll_community.NET"/>
+            <field name="code">NET</field>
+            <field name="sequence" eval="210"/>
+            <field name="appear_on_contract">true</field>
+            <field name="appears_on_payslip">true</field>
+            <field name="is_deduction">false</field>
+            <field name="is_tax">false</field>
+            <field name="taxable">false</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = employee.net_salary_calculation(categories)</field>
+            <field name="register_id" ref="hr_payroll_community.contribution_register_employees"/>
+        </record>
+
+
+        <record id="hr_payroll_community.hr_rule_da" model="hr.salary.rule">
+            <field name="sequence" eval="501"/>
+            <field name="appear_on_contract">false</field>
+            <field name="appears_on_payslip">false</field>
+            <field name="active">false</field>
+            <field name="is_deduction">false</field>
+            <field name="is_tax">false</field>
+            <field name="taxable">false</field>
+        </record>
+
+        <record id="hr_payroll_community.hr_rule_travel" model="hr.salary.rule">
+            <field name="sequence" eval="502"/>
+            <field name="appear_on_contract">false</field>
+            <field name="appears_on_payslip">false</field>
+            <field name="active">false</field>
+            <field name="is_deduction">false</field>
+            <field name="is_tax">false</field>
+            <field name="taxable">false</field>
+        </record>
+
+        <record id="hr_payroll_community.hr_rule_meal" model="hr.salary.rule">
+            <field name="sequence" eval="503"/>
+            <field name="appear_on_contract">false</field>
+            <field name="appears_on_payslip">false</field>
+            <field name="active">false</field>
+            <field name="is_deduction">false</field>
+            <field name="is_tax">false</field>
+            <field name="taxable">false</field>
+        </record>
+
+        <record id="hr_payroll_community.hr_rule_medical" model="hr.salary.rule">
+            <field name="sequence" eval="504"/>
+            <field name="appear_on_contract">false</field>
+            <field name="appears_on_payslip">false</field>
+            <field name="active">false</field>
+            <field name="is_deduction">false</field>
+            <field name="is_tax">false</field>
+            <field name="taxable">false</field>
+        </record>
+
+        <record id="hr_payroll_community.hr_salary_rule_convance_allowance1" model="hr.salary.rule">
+            <field name="sequence" eval="505"/>
+            <field name="appear_on_contract">false</field>
+            <field name="appears_on_payslip">false</field>
+            <field name="active">false</field>
+            <field name="is_deduction">false</field>
+            <field name="is_tax">false</field>
+            <field name="taxable">false</field>
+        </record>
+
+        <record id="hr_payroll_community.hr_salary_rule_ca_gravie" model="hr.salary.rule">
+            <field name="sequence" eval="506"/>
+            <field name="appear_on_contract">false</field>
+            <field name="appears_on_payslip">false</field>
+            <field name="active">false</field>
+            <field name="is_deduction">false</field>
+            <field name="is_tax">false</field>
+            <field name="taxable">false</field>
+        </record>
+
+        <record id="hr_payroll_community.hr_salary_rule_meal_voucher" model="hr.salary.rule">
+            <field name="sequence" eval="507"/>
+            <field name="appear_on_contract">false</field>
+            <field name="appears_on_payslip">false</field>
+            <field name="active">false</field>
+            <field name="is_deduction">false</field>
+            <field name="is_tax">false</field>
+            <field name="taxable">false</field>
+        </record>
+
+        <record id="hr_payroll_community.hr_salary_rule_sales_commission" model="hr.salary.rule">
+            <field name="sequence" eval="508"/>
+            <field name="appear_on_contract">false</field>
+            <field name="appears_on_payslip">false</field>
+            <field name="active">false</field>
+            <field name="is_deduction">false</field>
+            <field name="is_tax">false</field>
+            <field name="taxable">false</field>
+        </record>
+
+        <record id="hr_payroll_community.hr_salary_rule_provident_fund1" model="hr.salary.rule">
+            <field name="sequence" eval="509"/>
+            <field name="appear_on_contract">false</field>
+            <field name="appears_on_payslip">false</field>
+            <field name="active">false</field>
+            <field name="is_deduction">false</field>
+            <field name="is_tax">false</field>
+            <field name="taxable">false</field>
+        </record>
+
+        <record id="hr_payroll_community.hr_rule_hra" model="hr.salary.rule">
+            <field name="sequence" eval="510"/>
+            <field name="appear_on_contract">false</field>
+            <field name="appears_on_payslip">false</field>
+            <field name="active">false</field>
+            <field name="is_deduction">false</field>
+            <field name="is_tax">false</field>
+            <field name="taxable">false</field>
+        </record>
+
+    </data>
+</odoo>

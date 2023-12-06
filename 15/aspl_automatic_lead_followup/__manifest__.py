@@ -17,7 +17,7 @@
     """,
     "author": "Aspire Softserv Pvt. Ltd",
     "website": "https://aspiresoftserv.com",
-    "depends": ['base', 'hr', 'crm', 'mail'],
+    "depends": ['hr', 'crm', 'mail'],
     "external_dependencies": {
         'python': ['html']
     },
@@ -31,5 +31,5 @@
     "installable": True,
     "maintainer": "Aspire Softserv Pvt. Ltd",
     "support": "odoo@aspiresoftserv.com",
-    # 'images': ['static/description/banner.gif'],
+    "images": ['static/description/banner.gif'],
 }
