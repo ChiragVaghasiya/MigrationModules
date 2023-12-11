@@ -57,10 +57,10 @@ class CrmFollowup(models.Model):
                 'email_layout_xmlid': 'mail.mail_notification_paynow',
                 'subject': crm_obj.name,
                 'body': body_content,
-                'partner_ids': [crm_obj.partner_id.id],
+                'partner_ids': crm_obj.partner_id and [crm_obj.partner_id.id] or [],
                 'author_id': self.env.user.id,
                 'email_from': crm_obj.user_id.login,
-                'email_to': crm_obj.partner_id.email,
+                'email_to': crm_obj.partner_id and crm_obj.partner_id.email or crm_obj.email_from,
             }
             ctx = dict(self.env.context)
             ctx.update({'from_lead_followup': True, 'mail_notify_force_send': True})
@@ -82,18 +82,20 @@ class CrmFollowup(models.Model):
             if crm_obj.followup_start_date <= date.today():
                 for line_obj in crm_obj.followup_id.crm_followup_line_ids:
                     if ((crm_obj.followup_start_date + relativedelta(days=line_obj.frequency_days)) == date.today()):
-                        mail_sender = CrmFollowup.mail_sender(self, crm_obj, line_obj)
-                        message_id = mail_sender[0]
-                        if message_id != False:
-                            crm_obj.write({
-                                'last_followup_send_date': date.today(),
-                            })
-                            crm_obj.followup_history_line_ids.create({
-                                'followup_history_id': crm_obj.id,
-                                'message_id': message_id.message_id,
-                                'send_on': datetime.now(),
-                                'email_from': crm_obj.user_id.login,
-                                'email_to': crm_obj.partner_id.email,
-                                'content': mail_sender[1],
-                            })
-                            break
+                        if (crm_obj.partner_id and crm_obj.partner_id.email) or crm_obj.email_from:
+                            mail_sender = CrmFollowup.mail_sender(self, crm_obj, line_obj)
+                            message_id = mail_sender[0]
+                            if message_id != False:
+                                crm_obj.write({
+                                    'last_followup_send_date': date.today(),
+                                })
+                                crm_obj.followup_history_line_ids.create({
+                                    'followup_history_id': crm_obj.id,
+                                    'message_id': message_id.message_id,
+                                    'send_on': datetime.now(),
+                                    'email_from': crm_obj.user_id.login,
+                                    'email_to': crm_obj.partner_id.email,
+                                    'content': mail_sender[1],
+                                })
+                                break
+        return True
