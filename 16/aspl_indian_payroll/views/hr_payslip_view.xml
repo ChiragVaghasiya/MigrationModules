@@ -7,15 +7,18 @@
         <field name="inherit_id" ref="hr_payroll_community.view_hr_payslip_form" />
         <field name="arch" type="xml">
 
+            <xpath expr="//button[@name='action_send_email']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//button[3]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
             <xpath expr='//button[@name="compute_sheet"]' position='after'>
                 <button string="Send Mail"
                     name="action_payslip_send"
                     type="object"
-                    class="oe_highlight" />
-            </xpath>
-
-            <xpath expr='//button[@name="action_payslip_send"]' position='replace'>
-                <button string="Send Mail" name="action_payslip_send" type="object"
                     class="oe_highlight"
                     groups="hr_payroll_community.group_hr_payroll_community_manager" />
             </xpath>

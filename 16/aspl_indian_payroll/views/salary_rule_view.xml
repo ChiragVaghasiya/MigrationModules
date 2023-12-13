@@ -3,16 +3,31 @@
     <record id="hr_payroll_form_inherit_new" model="ir.ui.view">
         <field name="name">hr.payroll.form.inherit.new</field>
         <field name="model">hr.salary.rule</field>
-        <field name="inherit_id" ref="hr_payroll_community.hr_salary_rule_form" />
+        <field name="inherit_id" ref="hr_payroll_community.hr_salary_rule_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='appears_on_payslip']" position="after">
-                <field name="taxable" string="Taxable" widget='checkbox' />
+
+            <xpath expr='//group[1]' position='replace'>
+                <group>
+                    <group>
+                        <field name="code"/>
+                        <field name="appear_on_contract" string="Appear on Contract" widget='checkbox'/>
+                        <field name="is_deduction" string="Is a Deduction" widget='checkbox'/>
+                        <field name="appears_on_payslip"/>
+                    </group>
+                    <group>
+                        <field name="sequence"/>
+                        <field name="is_tax" string="Is a Tax" widget='checkbox'/>
+                        <field name="active"/>
+                        <field name="taxable" string="Taxable" widget='checkbox'/>
+                        <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
+                    </group>
+                </group>
             </xpath>
-            <xpath expr="//field[@name='sequence']" position="after">
-                <field name="appear_on_contract" string="Appear on Contract" widget='checkbox' />
-                <field name="is_tax" string="Is a Tax" widget='checkbox' />
-                <field name="is_deduction" string="Is a Deduction" widget='checkbox' />
-            </xpath>
+
+<!--            <xpath expr='//notebook/page[1]/group[1]/field[@name="amount_select"]' position='replace'>-->
+
+<!--            </xpath>-->
+
         </field>
     </record>
 </odoo>

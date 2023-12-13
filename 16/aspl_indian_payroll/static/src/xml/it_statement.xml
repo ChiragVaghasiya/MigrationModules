@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<templates>
+<templates id="template" xml:space="preserve">
     <t t-name="ItStatementMain">
         <div class="oh_dashboards">
             <div class="container-fluid o_hr_dashboard">
@@ -38,8 +38,7 @@
                     <t t-esc="widget.login_employee['display_name']"/>
                     - IT Statement [
                     <t t-esc="current_financial_year"/>
-                    ]
-                </div>
+                    ]</div>
                 <div class="heading_table_statement">( Amount in ₹ )</div>
 
                 <table class="table table-borderless">
@@ -66,12 +65,10 @@
                             <tr>
                                 <td class="bold">
                                     <t t-if="i=='Income'">
-                                        A.
-                                        <t t-esc="i"/>
+                                       A. <t t-esc="i"/>
                                     </t>
                                     <t t-else="">
-                                        B.
-                                        <t t-esc="i"/>
+                                        B. <t t-esc="i"/>
                                     </t>
                                 </td>
                             </tr>
@@ -146,7 +143,7 @@
                             </t>
                             <tr class="bold border_m">
                                 <td>
-
+                                    
                                     E. Income From Other Sources (Including House Properties)
                                 </td>
                             </tr>
@@ -164,9 +161,8 @@
                             </t>
                             <tr class="border_m">
                                 <td class="bold table_data_it_components">
-
-                                    F. Gross Total Income ( C + D + E )
-                                </td>
+                                    
+F. Gross Total Income ( C + D + E )</td>
 
                                 <td style="text-align:right;">
                                     <t t-esc="it_statement_income_components_total"/>
@@ -175,8 +171,8 @@
                             <t t-set="it_statement_deduction_components_total" t-value="0"/>
                             <tr class="bold border_m">
                                 <td>
-
-                                    G. Deduction Under Chapter VI A
+                                    
+G. Deduction Under Chapter VI A
                                 </td>
                             </tr>
                             <t t-foreach="section_via" t-as="i">
@@ -193,7 +189,7 @@
                             </t>
                             <tr class="bold border_m">
                                 <td>
-                                    H. Less Deduction Under Section 16
+                                     H. Less Deduction Under Section 16
                                 </td>
                             </tr>
                             <t t-foreach="section_16" t-as="i">
@@ -210,9 +206,8 @@
                             </t>
                             <tr class="border_m">
                                 <td class="bold table_data_it_components">
-
-                                    I. Total Deduction ( G + H )
-                                </td>
+                                    
+I. Total Deduction ( G + H )</td>
 
                                 <td style="text-align:right;">
                                     <t t-esc="it_statement_deduction_components_total"/>
@@ -220,17 +215,16 @@
                             </tr>
                             <tr class="border_m">
                                 <td class="bold table_data_it_components">
-
-                                    J. Total Taxable Amount ( F - I )
-                                </td>
+                                    
+J. Total Taxable Amount ( F - I )</td>
                                 <td style="text-align:right;">
                                     <t t-esc="it_statement_income_components_total - it_statement_deduction_components_total"/>
                                 </td>
                             </tr>
                             <tr class="bold border_m">
                                 <td>
-
-                                    K. Annual Tax
+                                    
+K. Annual Tax
                                 </td>
                             </tr>
                             <t t-foreach="tax_amount_old_regime_dict" t-as="i">
@@ -320,9 +314,8 @@
                             </t>
                             <tr class="border_m">
                                 <td class="bold table_data_it_components">
-
-                                    F. Gross Total Income ( C + D + E )
-                                </td>
+                                    
+F. Gross Total Income ( C + D + E )</td>
 
                                 <td style="text-align:right;">
                                     <t t-esc="new_regine_total"/>
@@ -330,7 +323,7 @@
                             </tr>
                             <tr class="bold border_m">
                                 <td>
-                                    G. Less Deduction Under Section 16
+                                     G. Less Deduction Under Section 16
                                 </td>
                             </tr>
                             <t t-foreach="section_16" t-as="i">
@@ -347,16 +340,15 @@
                             </t>
                             <tr class="border_m">
                                 <td class="bold table_data_it_components">
-
-                                    H. Total Taxable Amount ( F - G )
-                                </td>
+                                    
+H. Total Taxable Amount ( F - G )</td>
                                 <td style="text-align:right;">
                                     <t t-esc="new_regine_total"/>
                                 </td>
                             </tr>
                             <tr class="bold border_m">
                                 <td>
-                                    I. Annual Tax
+I. Annual Tax
                                 </td>
                             </tr>
                             <t t-foreach="tax_amount_new_regime_dict" t-as="i">

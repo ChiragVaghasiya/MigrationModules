@@ -109,7 +109,7 @@
                         to proceed with approval.
                     </h5>
 
-                    <group attrs="{'invisible': [('state', '!=', '1')]}">
+                    <group attrs="{'invisible': [('state', '!=', '1')]}" style="margin: 29px 0 -25px 0;">
                         <field name="approve_all_leave"/>
                     </group>
 
@@ -134,17 +134,18 @@
                     </h5>
 
                     <field attrs="{'invisible': [('state', '!=', '3')]}" name="contract_ids" nolabel="1" readonly="1"
-                           widget="many2many_tags"/>
+                           widget="many2many_tags" style="margin: 10px 0 -25px 0;"/>
 
                     <group attrs="{'invisible': [('state', '!=', '4')]}" string="Salary Hold"/>
                     <h5 attrs="{'invisible': [('state', '!=', '4')]}">Following employees/consultants are in notice
                         period. No salary has been hold so far. You
                         can remove employees from the list below if you don't want to hold salary. It will hold it
-                        for the selected period otherwise
+                        for the selected period otherwise.
                     </h5>
 
-
-                    <field attrs="{'invisible': [('state', '!=', '4')]}" name="remove_all_salary_hold_emp"/>
+                    <group attrs="{'invisible': [('state', '!=', '4')]}" style="margin: 22px 0 22px 0;">
+                        <field name="remove_all_salary_hold_emp"/>
+                    </group>
 
                     <field attrs="{'invisible': [('state', '!=', '4')]}" name="employee_ids" nolabel="1"/>
 
@@ -156,7 +157,7 @@
                     </h5>
 
 
-                    <field attrs="{'invisible': [('state', '!=', '5')]}" name="full_final_ids" nolabel="1"/>
+                    <field attrs="{'invisible': [('state', '!=', '5')]}" name="full_final_ids" nolabel="1" style="margin: 22px 0 11px 0;"/>
 
                 </sheet>
 

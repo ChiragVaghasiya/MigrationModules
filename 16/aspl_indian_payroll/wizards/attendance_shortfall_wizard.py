@@ -20,7 +20,7 @@ class PayslipWizards(models.TransientModel):
     payslip_run_id = fields.Many2one('hr.payslip.run')
 
     approve_all_leave = fields.Boolean(string='All Leave Approve?')
-    remove_all_salary_hold_emp = fields.Boolean(string='Remove all salary hold employee?')
+    remove_all_salary_hold_emp = fields.Boolean(string='Remove all salary hold employee ?')
 
     field1 = fields.Char("Field1")
     state = fields.Selection(

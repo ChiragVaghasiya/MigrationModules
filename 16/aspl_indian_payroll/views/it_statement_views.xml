@@ -5,8 +5,8 @@
         <field name="tag">it_statement</field>
     </record>
 
-    <!-- <menuitem id="menu_it_statement" name="IT Statement" sequence="44"
+    <menuitem id="menu_it_statement" name="IT Statement" sequence="42"
               parent="hr_payroll_community.menu_hr_payroll_community_root" action="action_it_statement"
-              groups="aspl_indian_payroll.group_employee_category,hr_payroll_community.group_hr_payroll_community_manager"/> -->
+              groups="aspl_indian_payroll.group_employee_category,hr_payroll_community.group_hr_payroll_community_manager"/>
 
 </odoo>
