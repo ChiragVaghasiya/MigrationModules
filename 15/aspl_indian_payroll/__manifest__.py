@@ -10,6 +10,7 @@
     "category": "Payroll",
     "summary": "Automates payroll, including email payslips, notice period salary holds, and IT declaration management.",
     "version": "15.0.0.1.0",
+    "price": 450.00,
     "license": "AGPL-3",
     'description': """
         This module add functionality like calculate shortfall, send automatic payslip mail to employee, allow user to hold salary of employee who is in notice period, manage full & final, manage IT Declaration and statement.
